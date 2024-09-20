@@ -16,21 +16,11 @@ nodejs 20+
 node --version
 # v20.17.0 <- 현재 시점 lts 최고 버전
 
-# corepack 사용
-corepack enable
-
-# yarn berry 사용
-yarn set version stable
-
 # 패키지 설치
-yarn install
+npm install
 
 # 앱 실행
-yarn dev
-
-# yarn 버전 업그레이드 방법
-# 버전은 package.json의 packageManager에 설정되어있음
-corepack install --global yarn
+npm dev
 ```
 
 ## 프로젝트 구조 및 기술스택
@@ -43,8 +33,3 @@ corepack install --global yarn
 ├── turbo.json # 터보팩으로 모노레포 구성
 └── yarn.lock # yarn berry 사용
 ```
-
-## 일부 디펜던시 문제
-eslint 설정 중 오래되어 최신버전의 eslint를 인식하지 못하여 dependency 오류가 발생하는 경우가 존재함. 
-그리하여 `.yarnrc.yml`에 `packageExtensions` 프로퍼티에 해당 패키지들 eslint, typescript 찾을 수 있게 수정함
-
