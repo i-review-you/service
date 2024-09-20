@@ -1,47 +1,36 @@
-"use client";
+import Logo from './logo-small.svg';
 
 import React from "react";
-import { useState } from "react";
+import Image from "next/image";
+import { login } from './actions';
 
 export default function Page() {
-  const [result, setResult] = useState();
-  console.log("fff", result);
-
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        const emailInput = event.currentTarget.elements.namedItem(
-          "email"
-        ) as HTMLInputElement;
-        const passwordInput = event.currentTarget.elements.namedItem(
-          "password"
-        ) as HTMLInputElement;
-
-        fetch(`http://localhost:3000/auth`, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            email: emailInput.value,
-            password: passwordInput.value,
-          }),
-        })
-          .then((res) => {
-            res.json().then((result) => {
-              setResult(result);
-            });
-          })
-          .catch((e) => {
-            console.log("error", e);
-          });
-      }}
-    >
-      <input name="email" />
-      <input type="password" name="password" />
-      <button type="submit">Login</button>
-      <pre style={{ whiteSpace: "pre-line" }}>{JSON.stringify(result)}</pre>
-    </form>
+    <div className="h-full flex flex-col justify-center gap-4">
+      <Image src={Logo} alt="로고" />
+      <form action={login}>
+        <input
+          name="email"
+          className="w-full px-3 py-3 border border-gray-100 rounded-[5px]"
+          placeholder="이메일"
+        />
+        <input 
+          type="password" 
+          name="password"
+          className="mt-2.5 w-full px-3 py-3 border border-gray-100 rounded-[5px]"
+          placeholder="비밀번호"
+        />
+        <button
+          type="submit"
+          className="mt-12 py-4 block w-full bg-gray-900 text-[20px] text-white text-center font-bold rounded-[10px]"
+        >
+          로그인
+        </button>
+      </form>
+      <div className="flex justify-between">
+        <a>비밀번호 초기화</a>
+        <a>회원가입</a>
+      </div>
+    </div>
   );
 }
