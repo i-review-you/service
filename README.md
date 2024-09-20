@@ -20,7 +20,7 @@ node --version
 npm install
 
 # 앱 실행
-npm dev
+npm run dev
 ```
 
 ## 프로젝트 구조 및 기술스택
