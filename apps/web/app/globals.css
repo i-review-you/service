@@ -12,7 +12,7 @@ a {
 
 body {
   margin: 0 auto;
-  max-width: 390px;
+  max-width: 768px;
   height: 100vh;
   background-color: #939393;
 }
