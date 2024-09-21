@@ -1,7 +1,7 @@
 'use server';
 import { cookies } from "next/headers";
 
-export async function login(formData: FormData) {
+export async function login(prevState: any, formData: FormData) {
   const response = await fetch(`http://localhost:3000/auth`, {
     method: 'POST',
     headers: {
@@ -13,6 +13,11 @@ export async function login(formData: FormData) {
     })
   });
   const result = await response.json();
+  if (!result.session) {
+    return {
+      message: '아이디 혹은 비밀번호를 확인해주세요',
+    };
+  }
   cookies().set('token', result.session.access_token);
 
   // Mutate data
