@@ -2,7 +2,8 @@
   "name": "i-review-you",
   "workspaces": [
     "apps/api",
-    "apps/web"
+    "apps/web",
+    "packages/react-components"
   ],
   "scripts": {
     "check-types": "tsc --noEmit",
