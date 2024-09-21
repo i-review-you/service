@@ -1,5 +1,12 @@
 import React from "react";
+import ReviewItem from "../../../components/reviews/ReviewItem";
+import ReviewFilter from "../../../components/reviews/ReviewFilter";
 
 export default function Page() {
-  return <div>여기는 리뷰 페이지 입니다.</div>;
+  return (
+    <div>
+      <ReviewFilter />
+      <ReviewItem />
+    </div>
+  );
 }
