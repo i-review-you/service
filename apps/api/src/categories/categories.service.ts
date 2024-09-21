@@ -14,7 +14,8 @@ export class CategoriesService {
       .select(`
             id,
             name,
-            sort_order
+            sort_order,
+            visibility
             `)
       .eq('user_id', user.id)
       .is('deleted_at', null)
