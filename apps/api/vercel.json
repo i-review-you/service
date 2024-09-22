@@ -1,19 +1,7 @@
 {
   "version": 2,
   "buildCommand": "npm run build",
-  "builds": [
-    {
-      "src": "dist/main.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "dist/main.js",
-      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
-    }
-  ],
+  "rewrites": [{ "source": "/(.*)", "destination": "/api" }],
   "outputDirectory": "dist",
   "regions": ["icn1"]
 }
