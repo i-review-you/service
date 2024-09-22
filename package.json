@@ -8,6 +8,7 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "build": "turbo run build",
+    "build:api": "turbo run build --filter=api",
     "dev": "turbo run dev",
     "lint": "turbo run lint"
   },
