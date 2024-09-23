@@ -22,3 +22,7 @@ main {
   padding: 32px;
   background-color: white;
 }
+
+.form-element-style {
+  @apply w-full px-3 py-3 border border-gray-200 rounded-[5px] my-2;
+}
