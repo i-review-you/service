@@ -1,33 +1,30 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import useEmblaCarousel from "embla-carousel-react";
+import "./carousel.css";
 
 export default function ReviewImages({ images }: { images: string[] }) {
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 2.5,
-    slidesToScroll: 1,
-    arrows: false,
-  };
+  const [emblaRef] = useEmblaCarousel();
 
   return (
-    <Slider {...settings}>
-      {images.map((image, index) => (
-        <div key={index} className="pr-2">
-          <Image
-            key={index}
-            src={image}
-            alt="Review Image"
-            width={300}
-            height={300}
-          />
+    <section className="embla">
+      <div className="embla__viewport" ref={emblaRef}>
+        <div className="embla__container">
+          {images.map((image, index) => (
+            <div key={index} className="embla__slide">
+              <Image
+                key={index}
+                src={image}
+                alt="Review Image"
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+          ))}
         </div>
-      ))}
-    </Slider>
+      </div>
+    </section>
   );
 }
