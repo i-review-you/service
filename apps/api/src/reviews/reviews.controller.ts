@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -6,64 +7,99 @@ import {
   Param,
   Post,
   Put,
+  Res,
   UseGuards,
-} from "@nestjs/common";
-import { ReviewsService } from "./reviews.service";
-import { CreateReviewDto } from "./dto/CreateReviewDto";
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from "@nestjs/swagger";
-import { AuthGuard } from "src/auth/auth.guard";
-import { Response } from "express";
-import { GetCurrentUser } from "src/auth/auth.decorator";
+  HttpStatus,
+  HttpException,
+} from '@nestjs/common';
+import { ReviewsService } from './reviews.service';
+import { CreateReviewDto } from './dto/CreateReviewDto';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { GetCurrentUser } from 'src/auth/auth.decorator';
+import { Response } from 'express';
 
-// TODO: 상태코드 추가해야 함
-
-@ApiBearerAuth()
-@ApiTags("리뷰")
-@Controller("reviews")
+@Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
-  // TODO: 토큰 인증 후 리뷰 조회
-  // TODO: 전체 리뷰 조회 시 나와 내가 팔로우 하는 사람이 작성한 공개글을 보여줘야 함
-  // TODO: 내 게시글만 보기 선택 가능해야 함
   @Get()
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: "리뷰 목록", description: "리뷰를 가져옵니다." })
-  @ApiResponse({ status: 200, description: "리뷰를 가져왔습니다." })
-  // @ApiResponse({ status: 401, description: "로그인이 필요합니다." })
-  async getReviews() {
-    return this.reviewsService.getReviews();
+  async getReviews(@GetCurrentUser() user, @Res() res: Response) {
+    try {
+      const reviews = await this.reviewsService.getReviews(user);
+      // return res.status(HttpStatus.OK).json(reviews);
+      return res.status(HttpStatus.OK).json({
+        userId: user.id,
+        reviews,
+      });
+    }
+    catch (error) {
+      throw new HttpException(
+        'Failed to fetch reviews',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  // TODO: 토큰 인증 후 리뷰 생성
   @Post()
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: "리뷰 생성", description: "리뷰를 생성합니다." })
-  async createReview(@Body() createReviewDto: CreateReviewDto) {
-    return this.reviewsService.createReview(createReviewDto);
-  }
-
-  // TODO: 토큰 인증 후 리뷰 수정
-  @Put(":review_id")
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: "리뷰 수정", description: "리뷰를 수정합니다." })
-  async updateReview(
-    @Param("review_id") reviewId: number,
-    @Body() CreateReviewDto: CreateReviewDto,
+  async createReview(
+    @GetCurrentUser() user,
+    @Body() createReviewDto: CreateReviewDto,
+    @Res() res: Response,
   ) {
-    return this.reviewsService.updateReview(reviewId, CreateReviewDto);
+    try {
+      const newReview = await this.reviewsService.createReview(
+        user,
+        createReviewDto,
+      );
+      return res.status(HttpStatus.CREATED).json(newReview);
+    }
+    catch (error) {
+      throw new HttpException(
+        'Failed to create reviews',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
-  // TODO: 토큰 인증 후 리뷰 삭제
-  @Delete(":review_id")
+  @Put(':review_id')
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: "리뷰 삭제", description: "리뷰를 삭제합니다." })
-  async deleteReview(@Param("review_id") reviewId: number) {
-    return this.reviewsService.deleteReview(reviewId);
+  async updateReview(
+    @GetCurrentUser() user,
+    @Param('review_id') reviewId: number,
+    @Body() CreateReviewDto: CreateReviewDto,
+    @Res() res: Response,
+  ) {
+    try {
+      this.reviewsService.updateReview(user, reviewId, CreateReviewDto);
+      return res.status(HttpStatus.OK).json({
+        message: 'Success to update review',
+      });
+    }
+    catch (error) {
+      throw new HttpException('Failed to update eview', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Delete(':review_id')
+  @UseGuards(AuthGuard)
+  async deleteReview(
+    @GetCurrentUser() user,
+    @Param('review_id') reviewId: number,
+    @Res() res: Response,
+  ) {
+    try {
+      this.reviewsService.deleteReview(user, reviewId);
+      return res.status(HttpStatus.OK).json({
+        message: 'Success to delete review',
+      });
+    }
+    catch (error) {
+      throw new HttpException(
+        'Failed to delete review',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

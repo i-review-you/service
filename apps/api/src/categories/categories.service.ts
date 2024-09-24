@@ -1,21 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient('https://algsfyxfsvqgthqbmwzr.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZ3NmeXhmc3ZxZ3RocWJtd3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjYxMTEyODgsImV4cCI6MjA0MTY4NzI4OH0.7Y2QUFRraSGmt3NWbSGSUflMx71kjxWCVo8jA5EWjII');
+const supabase = createClient(
+  'https://algsfyxfsvqgthqbmwzr.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZ3NmeXhmc3ZxZ3RocWJtd3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjYxMTEyODgsImV4cCI6MjA0MTY4NzI4OH0.7Y2QUFRraSGmt3NWbSGSUflMx71kjxWCVo8jA5EWjII',
+);
 
 @Injectable()
 export class CategoriesService {
   async getList(user) {
-    const {
-      data,
-      error,
-    } = await supabase
+    const { data, error } = await supabase
       .from('categories')
-      .select(`
+      .select(
+        `
             id,
             name,
             sort_order
-            `)
+            `,
+      )
       .eq('user_id', user.id)
       .is('deleted_at', null)
       .order('sort_order', { ascending: true });
@@ -37,10 +39,7 @@ export class CategoriesService {
   }
 
   async update(user, { id, name, sort_order, visibility = 'private' }) {
-    const {
-      data,
-      error,
-    } = await supabase
+    const { data, error } = await supabase
       .from('categories')
       .update({
         name,
@@ -59,14 +58,30 @@ export class CategoriesService {
   }
 
   async delete(user, { id }) {
-    const {
-      data,
-      error,
-    } = await supabase.from('categories').update({ deleted_at: new Date() }).eq('id', Number(id)).eq('user_id', user.id).is('deleted_at', null).select();
+    const { data, error } = await supabase
+      .from('categories')
+      .update({ deleted_at: new Date() })
+      .eq('id', Number(id))
+      .eq('user_id', user.id)
+      .is('deleted_at', null)
+      .select();
 
     if (data.length > 0) {
       return true;
     }
     return error;
+  }
+
+  // 우선 해당 카테고리의 내가 작성한 리뷰들만 조회할 수 있도록 함
+  async getReviewsByCategory(user, categoryId) {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('category_id', categoryId)
+      .eq('user_id', user.id)
+      .is('deleted_at', null);
+
+    if (error) throw new Error(error.message);
+    return data;
   }
 }
