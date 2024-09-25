@@ -5,6 +5,10 @@ import { useFormState } from "react-dom";
 import { createReviewAction } from "./action";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { StarIcon as OutlineStarIcon } from "@heroicons/react/24/outline";
+import Button from "../../../components/reviews/ui/Button";
+import Select from "../../../components/reviews/ui/Select";
+import Input from "../../../components/reviews/ui/Input";
+import Textarea from "../../../components/reviews/ui/Textarea";
 
 type visibilityType = "private" | "followers";
 
@@ -14,26 +18,18 @@ function WriteVisibility() {
   return (
     <div className="flex gap-2 py-4 justify-center">
       <input name="visibility" type="text" hidden value={visibility} />
-      <button
-        type="button"
+      <Button
+        label="공개"
+        size="small"
         onClick={() => setVisibility("followers")}
-        className={`
-          py-2 w-[150px] block bg-white text-center text-gray-500 border border-gary-200 rounded-[10px]
-          ${visibility === "followers" && "bg-black text-white"}
-        `}
-      >
-        공개
-      </button>
-      <button
-        type="button"
+        scheme={`${visibility === "followers" ? "active" : "inactive"}`}
+      />
+      <Button
+        label="비공개"
+        size="small"
         onClick={() => setVisibility("private")}
-        className={`
-          py-2 w-[150px] block bg-white text-center text-gray-500 border border-gary-200 rounded-[10px]
-          ${visibility === "private" && "bg-black text-white"}
-        `}
-      >
-        비공개
-      </button>
+        scheme={`${visibility === "private" ? "active" : "inactive"}`}
+      />
     </div>
   );
 }
@@ -43,7 +39,7 @@ function WriteRating() {
   const MAX_RATING = 5;
 
   return (
-    <div className="text-center pt-8">
+    <div className="text-center py-4">
       <h3 className="font-bold text-xl pb-2">만족스러우셨나요?</h3>
       <div className="relative inline-block">
         <input name="rating" hidden type="text" value={starRating} />
@@ -54,7 +50,7 @@ function WriteRating() {
               <OutlineStarIcon
                 onClick={() => setStarRating(index + 1)}
                 key={index}
-                className="size-6 text-main"
+                className="size-8 text-primary"
               />
             ))}
         </div>
@@ -65,7 +61,7 @@ function WriteRating() {
               <StarIcon
                 onClick={() => setStarRating(index + 1)}
                 key={index}
-                className="size-6 text-main"
+                className="size-8 text-primary"
               />
             ))}
         </div>
@@ -83,51 +79,28 @@ export default function Page({
 
   return (
     <form action={formAction}>
-      <select
-        name="category"
-        className="w-full px-3 py-3 border border-gray-100 rounded-[5px] my-2"
-      >
-        <option value="전체">전체</option>
-      </select>
-      <input
-        type="text"
-        name="title"
-        className="w-full px-3 py-3 border border-gray-100 rounded-[5px] my-2"
-        placeholder="제목을 입력하세요"
-      />
-      <textarea
-        name="content"
-        className="w-full px-3 py-3 border border-gray-100 rounded-[5px] my-2"
-        placeholder="리뷰를 작성해주세요"
-      />
+      <Select name="category" options={[{ value: "1", label: "전체" }]} />
+      <Input name="title" placeholder="제목을 입력하세요" required={true} />
+      <Textarea name="content" placeholder="리뷰를 작성해주세요" />
       <div>
-        <input
+        <Input
           type="file"
-          className="w-full px-3 py-3 border border-gray-100 rounded-[5px] my-2"
+          name="imageUpload"
           placeholder="이미지 업로드"
+          required={true}
         />
       </div>
-      <input
-        name="tag"
-        type="text"
-        className="w-full px-3 py-3 border border-gray-100 rounded-[5px] my-2"
-        placeholder="태그"
-      />
-      <input
-        name="link"
-        type="text"
-        className="w-full px-3 py-3 border border-gray-100 rounded-[5px]"
-        placeholder="링크추가"
-      />
+      <Input name="tag" placeholder="태그" />
+      <Input name="link" placeholder="링크추가" />
       <WriteVisibility />
       <WriteRating />
-      <button
+      <Button
         type="submit"
+        label="리뷰 작성"
+        size="large"
+        scheme="primary"
         disabled={isPending}
-        className="text-center bg-black text-white font-bold w-full my-8 py-4 rounded-[5px]"
-      >
-        리뷰 작성
-      </button>
+      />
     </form>
   );
 }
