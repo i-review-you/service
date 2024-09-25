@@ -10,14 +10,14 @@ const supabase = createClient(
 @Injectable()
 export class LikesService {
   async toggleLike(user, reviewId) {
-    // 우선 좋아요를 누른 적이 있는지 조회
+    // 기존 좋아요 여부 확인
     const { data: existingLike, error: selectError } = await supabase
       .from('review_like')
       .select('*')
       .eq('user_id', user.id)
       .eq('review_id', reviewId)
       .is('deleted_at', null)
-      .single();
+      .maybeSingle();
 
     if (selectError) {
       throw new Error(selectError.message);
@@ -30,8 +30,10 @@ export class LikesService {
         .update({ deleted_at: new Date() })
         .eq('id', existingLike.id);
 
-      if (deleteError) throw new Error(deleteError.message);
-      return false;
+      if (deleteError) {
+        throw new Error(deleteError.message);
+      }
+      return false; // 좋아요 false 상태
     } else {
       const { error: insertError } = await supabase.from('review_like').insert({
         user_id: user.id,
@@ -40,8 +42,10 @@ export class LikesService {
         deleted_at: null,
       });
 
-      if (insertError) throw new Error(insertError.message);
-      return true;
+      if (insertError) {
+        throw new Error(insertError.message);
+      }
+      return true; // 좋아요 true 상태
     }
   }
 
@@ -49,7 +53,8 @@ export class LikesService {
     const { count, error } = await supabase
       .from('review_like')
       .select('*', { count: 'exact' })
-      .eq('review_id', reviewId);
+      .eq('review_id', reviewId)
+      .is('deleted_at', null);
 
     if (error) throw new Error(error.message);
     return count;

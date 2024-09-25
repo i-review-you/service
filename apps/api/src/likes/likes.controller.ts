@@ -14,10 +14,11 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { GetCurrentUser } from 'src/auth/auth.decorator';
 import { Response } from 'express';
 
-@Controller('review-likes')
+@Controller('review-like')
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}
 
+  // 좋아요 개수 셀 때는 사용자 인증 필요 x
   @Get(':review_id')
   async getLikeCount(
     @Param('review_id') reviewId: number,
@@ -44,8 +45,8 @@ export class LikesController {
     @Res() res: Response,
   ) {
     try {
-      const likeStatus = await this.likesService.toggleLike(user.id, reviewId);
-      return res.status(HttpStatus.OK).json({ likeStatus });
+      const isLiked = await this.likesService.toggleLike(user, reviewId);
+      return res.status(HttpStatus.OK).json({ isLiked });
     } catch (error) {
       return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
