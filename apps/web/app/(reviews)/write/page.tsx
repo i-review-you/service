@@ -9,6 +9,7 @@ import Button from "../../../components/reviews/ui/Button";
 import Select from "../../../components/reviews/ui/Select";
 import Input from "../../../components/reviews/ui/Input";
 import Textarea from "../../../components/reviews/ui/Textarea";
+import { useRouter } from "next/navigation";
 
 type visibilityType = "private" | "followers";
 
@@ -17,7 +18,7 @@ function WriteVisibility() {
 
   return (
     <div className="flex gap-2 py-4 justify-center">
-      <input name="visibility" type="text" hidden value={visibility} />
+      <input name="visibility" type="text" hidden value={visibility} readOnly />
       <Button
         label="공개"
         size="small"
@@ -42,7 +43,7 @@ function WriteRating() {
     <div className="text-center py-4">
       <h3 className="font-bold text-xl pb-2">만족스러우셨나요?</h3>
       <div className="relative inline-block">
-        <input name="rating" hidden type="text" value={starRating} />
+        <input name="rating" hidden type="number" value={starRating} readOnly />
         <div className="flex">
           {Array.from({ length: MAX_RATING })
             .fill(0)
@@ -76,19 +77,19 @@ export default function Page({
   searchParams: { id?: string };
 }) {
   const [state, formAction, isPending] = useFormState(createReviewAction, {});
+  const router = useRouter();
+
+  if (state.status) {
+    router.push("/reviews");
+  }
 
   return (
     <form action={formAction}>
-      <Select name="category" options={[{ value: "1", label: "전체" }]} />
+      <Select name="categoryId" options={[{ value: 1, label: "전체" }]} />
       <Input name="title" placeholder="제목을 입력하세요" required={true} />
       <Textarea name="content" placeholder="리뷰를 작성해주세요" />
       <div>
-        <Input
-          type="file"
-          name="imageUpload"
-          placeholder="이미지 업로드"
-          required={true}
-        />
+        <Input type="file" name="imageUpload" placeholder="이미지 업로드" />
       </div>
       <Input name="tag" placeholder="태그" />
       <Input name="link" placeholder="링크추가" />
