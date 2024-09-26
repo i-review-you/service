@@ -5,10 +5,10 @@ import { useFormState } from "react-dom";
 import { createReviewAction } from "./action";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { StarIcon as OutlineStarIcon } from "@heroicons/react/24/outline";
-import Button from "../../../components/reviews/ui/Button";
-import Select from "../../../components/reviews/ui/Select";
-import Input from "../../../components/reviews/ui/Input";
-import Textarea from "../../../components/reviews/ui/Textarea";
+import Button from "../../../components/ui/Button";
+import Select from "../../../components/ui/Select";
+import Input from "../../../components/ui/Input";
+import Textarea from "../../../components/ui/Textarea";
 
 type visibilityType = "private" | "followers";
 
