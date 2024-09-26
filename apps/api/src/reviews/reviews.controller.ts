@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/brace-style */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
@@ -32,12 +33,36 @@ export class ReviewsController {
         userId: user.id,
         reviews,
       });
-    }
-    catch (error) {
+    } catch (error) {
       throw new HttpException(
         'Failed to fetch reviews',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+
+  @Get(':review_id')
+  @UseGuards(AuthGuard)
+  async getReviewDetail(
+    @GetCurrentUser() user,
+    @Param('review_id') reviewId: number,
+    @Res() res: Response,
+  ) {
+    try {
+      const reviewDetail = await this.reviewsService.getReviewDetail(
+        user,
+        reviewId,
+      );
+      if (!reviewDetail) {
+        return res
+          .status(HttpStatus.NOT_FOUND)
+          .json({ message: 'Review not found' });
+      }
+      return res.status(HttpStatus.OK).json(reviewDetail);
+    } catch (error) {
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Failed to fetch review detail' });
     }
   }
 
@@ -54,8 +79,7 @@ export class ReviewsController {
         createReviewDto,
       );
       return res.status(HttpStatus.CREATED).json(newReview);
-    }
-    catch (error) {
+    } catch (error) {
       throw new HttpException(
         'Failed to create reviews',
         HttpStatus.BAD_REQUEST,
@@ -76,8 +100,7 @@ export class ReviewsController {
       return res.status(HttpStatus.OK).json({
         message: 'Success to update review',
       });
-    }
-    catch (error) {
+    } catch (error) {
       throw new HttpException('Failed to update eview', HttpStatus.BAD_REQUEST);
     }
   }
@@ -94,8 +117,7 @@ export class ReviewsController {
       return res.status(HttpStatus.OK).json({
         message: 'Success to delete review',
       });
-    }
-    catch (error) {
+    } catch (error) {
       throw new HttpException(
         'Failed to delete review',
         HttpStatus.BAD_REQUEST,
