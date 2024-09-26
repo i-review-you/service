@@ -5,13 +5,16 @@ import ReviewItem from "../../../components/reviews/ReviewItem";
 import { reviewDataSnake } from "../../../types/review";
 import { convertKeysToCamelCase } from "../../../utils/camelCaseUtil";
 
-export default async function Page() {
+export default async function Page({ searchParams }) {
   const token = cookies().get("token")?.value;
-  const result = await fetch("http://localhost:3000/reviews", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const result = await fetch(
+    `http://localhost:3000/reviews?myReview=${searchParams.myReview}&categoryId=${searchParams.categoryId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   const reviewsData = await result.json();
   const reviews: reviewDataSnake[] = reviewsData.reviews;
 
