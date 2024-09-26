@@ -18,7 +18,7 @@ function ReviewHeader({
   score: number;
 }) {
   return (
-    <div className="flex justify-between items-center pb-2">
+    <div className="flex items-center justify-between pb-2">
       <div className="flex items-center gap-2">
         <Link
           href={"/user/userId"}
@@ -42,7 +42,7 @@ function ReviewHeader({
       </div>
       <div>
         {/* 내 리뷰때만 보이게 */}
-        <EllipsisHorizontalIcon className="size-6 cursor-pointer" />
+        <EllipsisHorizontalIcon className="cursor-pointer size-6" />
       </div>
     </div>
   );
@@ -82,7 +82,7 @@ export default function ReviewItem({
   link,
 }: reviewData) {
   return (
-    <div className="flex flex-col justify-between gap-10 rounded-lg border border-gay-200 p-4 mb-4">
+    <div className="flex flex-col justify-between gap-10 p-4 mb-4 border rounded-lg border-gay-200">
       <div>
         <ReviewHeader username={username} score={score} />
         <ReviewImages images={images} />

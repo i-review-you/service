@@ -26,6 +26,23 @@ export default async function Page() {
       likes: 120,
       link: "https://example.com/review/12345",
     },
+    {
+      id: 2,
+      username: "john_doe",
+      score: 4,
+      images: [
+        "/images/no-image.svg",
+        "/images/no-image.svg",
+        "/images/no-image.svg",
+      ],
+      title: "Great Product!",
+      createAt: "2024-09-18",
+      contents:
+        "I really enjoyed using this product. It exceeded my expectations in every way. The build quality is excellent, and the performance is top-notch. Highly recommend!",
+      tags: ["electronics", "gadgets", "top-rated"],
+      likes: 120,
+      link: "https://example.com/review/12345",
+    },
   ];
 
   return (
