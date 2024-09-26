@@ -18,7 +18,7 @@ const Button = ({
 }: ButtonProps) => {
   const sizeClasses: Record<ButtonSize, string> = {
     large:
-      "fixed z-50 bottom-0 left-1/2 transform -translate-x-1/2 w-[768px] left-0 px-6 pt-4 pb-12 text-xl",
+      "fixed z-50 bottom-0 left-1/2 transform -translate-x-1/2 w-[768px] px-6 pt-4 pb-12 text-xl",
     medium: "w-full rounded-[10px] py-4 text-lg",
     small: "w-[150px] rounded-[10px] py-2",
   };
