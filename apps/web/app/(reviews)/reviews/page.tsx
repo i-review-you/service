@@ -13,6 +13,7 @@ export default async function Page({ searchParams }) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      next: { tags: ["reviews"] },
     }
   );
   const reviewsData = await result.json();

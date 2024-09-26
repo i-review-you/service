@@ -12,8 +12,17 @@ import ReviewActions from "./ReviewActions";
 import ReviewContents from "./ReviewContents";
 import ReviewImages from "./ReviewImages";
 import { reviewDataCamel } from "../../types/review";
+import ReviewEditModal from "./ReviewEditModal";
 
-function ReviewHeader({ userId, rating }: { userId: string; rating: number }) {
+function ReviewHeader({
+  userId,
+  rating,
+  reviewId,
+}: {
+  userId: string;
+  rating: number;
+  reviewId: number;
+}) {
   return (
     <div className="flex justify-between items-center pb-2">
       <div className="flex items-center gap-2">
@@ -40,6 +49,7 @@ function ReviewHeader({ userId, rating }: { userId: string; rating: number }) {
       <div>
         {/* 내 리뷰때만 보이게 */}
         <EllipsisHorizontalIcon className="size-6 cursor-pointer" />
+        <ReviewEditModal reviewId={reviewId} />
       </div>
     </div>
   );
@@ -88,7 +98,7 @@ export default function ReviewItem({
   return (
     <div className="flex flex-col justify-between gap-10 rounded-lg border border-gay-200 p-4 mb-4">
       <div>
-        <ReviewHeader userId={userId} rating={rating} />
+        <ReviewHeader userId={userId} rating={rating} reviewId={id} />
         <ReviewImages />
         <ReviewTitle title={title} createdAt={createdAt} />
         <ReviewContents contents={content} />
