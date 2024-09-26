@@ -9,6 +9,23 @@ const supabase = createClient(
 
 @Injectable()
 export class ReviewsService {
+  // 우선 해당 카테고리의 내가 작성한 리뷰들만 조회할 수 있도록 함
+  async getReviewsByCategory(user, categoryId: number) {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('category_id', categoryId)
+      .eq('user_id', user.id)
+      .is('deleted_at', null);
+
+    if (error) {
+      console.error('Error fetching reviews by category:', error.message);
+      throw new Error(error.message);
+    }
+
+    return data;
+  }
+
   // TODO: 내가 작성한 글 외에 팔로우한 사용자의 글도 조회할 수 있어야 함
   async getReviews(user) {
     const { data, error } = await supabase
