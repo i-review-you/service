@@ -10,6 +10,7 @@ import Select from "../../../components/reviews/ui/Select";
 import Input from "../../../components/reviews/ui/Input";
 import Textarea from "../../../components/reviews/ui/Textarea";
 import { useRouter } from "next/navigation";
+import { updateReviewAction } from "../../../action/updateReviewAction";
 
 type visibilityType = "private" | "followers";
 
@@ -76,7 +77,10 @@ export default function Page({
 }: {
   searchParams: { id?: string };
 }) {
-  const [state, formAction, isPending] = useFormState(createReviewAction, {});
+  const [state, formAction, isPending] = useFormState(
+    searchParams.id ? updateReviewAction : createReviewAction,
+    {}
+  );
   const router = useRouter();
 
   if (state.status) {
@@ -85,6 +89,13 @@ export default function Page({
 
   return (
     <form action={formAction}>
+      <input
+        type="text"
+        name="reviewId"
+        value={searchParams.id}
+        hidden
+        readOnly
+      />
       <Select name="categoryId" options={[{ value: 1, label: "전체" }]} />
       <Input name="title" placeholder="제목을 입력하세요" required={true} />
       <Textarea name="content" placeholder="리뷰를 작성해주세요" />
@@ -97,7 +108,7 @@ export default function Page({
       <WriteRating />
       <Button
         type="submit"
-        label="리뷰 작성"
+        label={searchParams.id ? "리뷰 수정" : "리뷰 작성"}
         size="large"
         scheme="primary"
         disabled={isPending}
