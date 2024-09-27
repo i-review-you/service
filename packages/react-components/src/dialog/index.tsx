@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     FloatingPortal,
     FloatingOverlay,
@@ -32,7 +33,7 @@ export function Dialog({isOpen, setIsOpen, children}) {
     // Set up label and description ids
     const labelId = useId();
     const descriptionId = useId();
-    return (
+    return isOpen && (
         <FloatingPortal>
             <FloatingOverlay
                 lockScroll

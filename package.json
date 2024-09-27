@@ -3,6 +3,7 @@
   "workspaces": [
     "apps/api",
     "apps/web",
+    "packages/config-tailwind",
     "packages/react-components"
   ],
   "scripts": {
