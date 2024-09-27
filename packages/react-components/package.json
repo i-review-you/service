@@ -1,4 +1,30 @@
 {
-  "name": "react-components",
-  "packageManager": "yarn@4.3.1"
+  "name": "@i-review-you/react-components",
+  "type": "module",
+  "main": "src/index.ts",
+  "sideEffects": false,
+  "scripts": {
+    "dev": "storybook dev -p 6006 --no-open",
+    "build:storybook": "storybook build"
+  },
+  "dependencies": {
+    "@floating-ui/react": "^0.26.24"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@i-review-you/config-tailwind": "*",
+    "@storybook/addon-essentials": "^8.3.3",
+    "@storybook/preview-api": "^8.3.3",
+    "@storybook/react": "^8.3.3",
+    "@storybook/react-vite": "^8.3.3",
+    "clsx": "^2.1.1",
+    "storybook": "^8.3.3",
+    "tailwindcss": "^3.4.13"
+  },
+  "overrides": {
+    "glob": "9.3.5"
+  }
 }
