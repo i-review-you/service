@@ -3,6 +3,7 @@ import type {Meta, StoryObj} from '@storybook/react';
 import React from 'react';
 import {useArgs} from '@storybook/preview-api';
 import {Dialog} from "./index";
+import {Button} from '../button';
 
 const meta: Meta<typeof Dialog> = {
     component: Dialog,
@@ -29,10 +30,10 @@ export const Primary: Story = {
 
         return (
             <div>
-                <button
+                <Button
                     onClick={() => updateArgs({isOpen: true})}
                 >오픈
-                </button>
+                </Button>
                 <Dialog
                     {...args}
                     setIsOpen={() => updateArgs({isOpen: false})}
