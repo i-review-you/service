@@ -1,16 +1,16 @@
 'use server';
-import {redirect} from "next/navigation";
-import {cookies} from "next/headers";
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
-import Form from './_form';
+import Form from './_categories';
 
 export default async function Page() {
   const token = cookies().get('token')?.value;
 
   const response = await fetch('http://localhost:3000/categories', {
     headers: {
-      'authorization': `Bearer ${token}`,
-    }
+      authorization: `Bearer ${token}`,
+    },
   });
 
   if (response.status === 401) {
@@ -20,6 +20,5 @@ export default async function Page() {
 
   return (
     <Form categories={categories} />
-
   );
 }
