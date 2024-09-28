@@ -3,6 +3,8 @@ import ReviewFilter from "../../../components/reviews/ReviewFilter";
 import ReviewItem from "../../../components/reviews/ReviewItem";
 import { reviewData } from "../../../types/review";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const res = await fetch("http://localhost:3000/reviews");
   const result = await res.json();
