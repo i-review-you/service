@@ -1,8 +1,8 @@
 name: "Chromatic"
 on:
-  branches:
-    - main
   push:
+    branches:
+      - main
     paths:
       - packages/react-components/**
 
