@@ -6,10 +6,7 @@ const supabase = createClient('https://algsfyxfsvqgthqbmwzr.supabase.co', 'eyJhb
 @Injectable()
 export class CategoriesService {
   async getList(user) {
-    const {
-      data,
-      error,
-    } = await supabase
+    const { data, error } = await supabase
       .from('categories')
       .select(`
             id,
@@ -38,10 +35,7 @@ export class CategoriesService {
   }
 
   async update(user, { id, name, sort_order, visibility = 'private' }) {
-    const {
-      data,
-      error,
-    } = await supabase
+    const { data, error } = await supabase
       .from('categories')
       .update({
         name,
@@ -60,14 +54,30 @@ export class CategoriesService {
   }
 
   async delete(user, { id }) {
-    const {
-      data,
-      error,
-    } = await supabase.from('categories').update({ deleted_at: new Date() }).eq('id', Number(id)).eq('user_id', user.id).is('deleted_at', null).select();
+    const { data, error } = await supabase
+      .from('categories')
+      .update({ deleted_at: new Date() })
+      .eq('id', Number(id))
+      .eq('user_id', user.id)
+      .is('deleted_at', null)
+      .select();
 
     if (data.length > 0) {
       return true;
     }
     return error;
+  }
+
+  // 우선 해당 카테고리의 내가 작성한 리뷰들만 조회할 수 있도록 함
+  async getReviewsByCategory(user, categoryId) {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('category_id', categoryId)
+      .eq('user_id', user.id)
+      .is('deleted_at', null);
+
+    if (error) throw new Error(error.message);
+    return data;
   }
 }
