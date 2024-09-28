@@ -7,8 +7,7 @@
       ],
       "outputs": [
         ".next/**",
-        "!.next/cache/**",
-        "storybook-static/**"
+        "!.next/cache/**"
       ]
     },
     "check-types": {
@@ -19,6 +18,11 @@
     "dev": {
       "persistent": true,
       "cache": false
+    },
+    "storybook": {
+      "dependsOn": [
+        "^storybook"
+      ]
     },
     "build:storybook": {
       "dependsOn": [

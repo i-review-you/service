@@ -10,6 +10,7 @@
     "check-types": "tsc --noEmit",
     "build": "turbo run build",
     "build:api": "turbo run build --filter=api",
+    "storybook": "turbo run storybook --filter=@i-review-you/react-components",
     "dev": "turbo run dev",
     "lint": "turbo run lint"
   },
