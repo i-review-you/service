@@ -30,11 +30,11 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build
+        run: npm run build:api
 
       - name: Pack
         run: |
-          zip -r ${{github.run_id}}.zip ./apps/api/dist
+          zip -r ${{github.run_id}}.zip ./apps/api
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4.4.0
@@ -57,8 +57,8 @@ jobs:
 
       - name: Deploy
         run: |
-          aws s3 cp "deploy-files/${{github.run_id}}.zip" s3://elasticbeanstalk-ap-northeast-2-${{ secrets.AWS_ACCOUNT_ID }}/artifact/dotnet-mvc-app/
-          aws elasticbeanstalk create-application-version --application-name $BEANSTALK_APPLICATION_NAME --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-ap-northeast-2-${{ secrets.AWS_ACCOUNT_ID }}",S3Key="artifact/dotnet-mvc-app/${{github.run_id}}.zip"
+          aws s3 cp "deploy-files/${{github.run_id}}.zip" s3://elasticbeanstalk-ap-northeast-2-${{ secrets.AWS_ACCOUNT_ID }}/
+          aws elasticbeanstalk create-application-version --application-name $BEANSTALK_APPLICATION_NAME --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-ap-northeast-2-${{ secrets.AWS_ACCOUNT_ID }}",S3Key="${{github.run_id}}.zip"
           aws elasticbeanstalk update-environment --application-name $BEANSTALK_APPLICATION_NAME --environment-name $BEANSTALK_ENVIRONMENT_NAME --version-label ${{github.run_id}}
           aws elasticbeanstalk wait environment-updated --application-name $BEANSTALK_APPLICATION_NAME --environment-name $BEANSTALK_ENVIRONMENT_NAME
 
