@@ -1,6 +1,8 @@
-name: test
+name: build - api
 on:
   pull_request:
+    paths:
+      - apps/api/**
     types: [opened, synchronize]
 
 jobs:
