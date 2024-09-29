@@ -7,9 +7,8 @@ on:
       - apps/api/**
 
 env:
-  PROJECT_LOCATION: dotnet-mvc/dotnet-mvc.csproj
   BEANSTALK_APPLICATION_NAME: i-review
-  BEANSTALK_ENVIRONMENT_NAME: e-c6mgum4de2
+  BEANSTALK_ENVIRONMENT_NAME: I-review-env
 
 jobs:
   build:
@@ -61,4 +60,3 @@ jobs:
           aws elasticbeanstalk create-application-version --application-name $BEANSTALK_APPLICATION_NAME --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-ap-northeast-2-${{ secrets.AWS_ACCOUNT_ID }}",S3Key="${{github.run_id}}.zip"
           aws elasticbeanstalk update-environment --application-name $BEANSTALK_APPLICATION_NAME --environment-name $BEANSTALK_ENVIRONMENT_NAME --version-label ${{github.run_id}}
           aws elasticbeanstalk wait environment-updated --application-name $BEANSTALK_APPLICATION_NAME --environment-name $BEANSTALK_ENVIRONMENT_NAME
-
