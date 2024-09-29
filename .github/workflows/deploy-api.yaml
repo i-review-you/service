@@ -33,7 +33,8 @@ jobs:
 
       - name: Pack
         run: |
-          zip -r ${{github.run_id}}.zip ./apps/api
+          cd ./apps/api
+          zip -r ${{github.run_id}}.zip .
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4.4.0
