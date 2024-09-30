@@ -4,6 +4,7 @@ import {
   HandThumbUpIcon as OutlineHandThumbUpIcon,
   ArrowUpOnSquareIcon,
 } from "@heroicons/react/24/outline";
+import { toggleLikesAction } from "../../action/likesAction";
 
 interface ReviewActionProps {
   reviewId: number;
@@ -13,13 +14,11 @@ interface ReviewActionProps {
 }
 
 export default function ReviewActions({
-  likes,
-  link,
   reviewId,
   title,
+  likes,
+  link,
 }: ReviewActionProps) {
-  const handleClikLike = () => {};
-
   const handleClikShare = async () => {
     const shareData = {
       title,
@@ -36,11 +35,14 @@ export default function ReviewActions({
 
   return (
     <div className="flex justify-between">
-      <div onClick={handleClikLike} className="flex cursor-pointer">
+      <div
+        onClick={() => toggleLikesAction(reviewId)}
+        className="flex gap-2 cursor-pointer"
+      >
         <OutlineHandThumbUpIcon className="size-6" />
         {/* <HandThumbUpIcon className="size-6" /> */}
         도움돼요
-        {likes}
+        <span className="font-bold">{likes > 0 && likes}</span>
       </div>
       <div className="flex gap-2">
         {link && (
