@@ -11,7 +11,7 @@ export default function ReviewContents({ contents }: { contents: string }) {
     if (!originalCommentRef.current || !commentRef.current) return;
     const { clientHeight: originalHeight } = originalCommentRef.current;
     const { clientHeight: commentHeight } = commentRef.current;
-    setIsEllipsed(originalHeight !== commentHeight);
+    if (commentHeight > 48) setIsEllipsed(originalHeight !== commentHeight);
   }, []);
 
   return (

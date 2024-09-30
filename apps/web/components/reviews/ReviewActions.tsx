@@ -6,10 +6,10 @@ import {
 } from "@heroicons/react/24/outline";
 
 interface ReviewActionProps {
-  likes: number;
-  link?: string;
   reviewId: number;
   title: string;
+  likes?: number;
+  link?: string;
 }
 
 export default function ReviewActions({
