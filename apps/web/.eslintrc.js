@@ -15,9 +15,7 @@ module.exports = {
     ecmaVersion: 2020,
   },
   extends: 'next/core-web-vitals',
-  plugins: [
-    '@stylistic',
-  ],
+  plugins: ['@stylistic'],
   rules: {
     ...customized.rules,
   },

@@ -1,12 +1,12 @@
-import Link from "next/link";
-import dayjs from "dayjs";
+import Link from 'next/link';
+import dayjs from 'dayjs';
 
-import { reviewDataCamel } from "../../types/review";
-import ReviewHeader from "./ReviewHeader";
-import ReviewContents from "./ReviewContents";
-import ReviewImages from "./ReviewImages";
-import ReviewActions from "./ReviewActions";
-import { fetchLikesAction } from "../../action/likesAction";
+import { reviewDataCamel } from '../../types/review';
+import ReviewHeader from './ReviewHeader';
+import ReviewContents from './ReviewContents';
+import ReviewImages from './ReviewImages';
+import ReviewActions from './ReviewActions';
+import { fetchLikesAction } from '../../action/likesAction';
 
 function ReviewTitle({
   title,
@@ -18,7 +18,7 @@ function ReviewTitle({
   return (
     <div className="flex justify-between">
       <h3 className="font-bold">{title}</h3>
-      <p>{dayjs(createdAt).format("YYYY.MM.DD")}</p>
+      <p>{dayjs(createdAt).format('YYYY.MM.DD')}</p>
     </div>
   );
 }
@@ -51,7 +51,7 @@ export default async function ReviewItem({
   const likes = await fetchLikesAction(id);
 
   return (
-    <div className="flex flex-col justify-between gap-10 rounded-lg border border-gay-200 p-4 mb-4">
+    <div className="flex flex-col justify-between gap-10 p-4 mb-4 border rounded-lg border-gay-200">
       <div>
         <ReviewHeader userId={userId} rating={rating} reviewId={id} />
         <ReviewImages />

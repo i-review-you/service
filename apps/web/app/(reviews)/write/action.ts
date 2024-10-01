@@ -1,19 +1,19 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
 
 export async function createReviewAction(_: any, formData: FormData) {
-  const title = formData.get("title")?.toString();
-  const content = formData.get("content")?.toString();
-  const categoryId = formData.get("categoryId")?.toString();
-  const visibility = formData.get("visibility")?.toString();
-  const rating = formData.get("rating")?.toString();
+  const title = formData.get('title')?.toString();
+  const content = formData.get('content')?.toString();
+  const categoryId = formData.get('categoryId')?.toString();
+  const visibility = formData.get('visibility')?.toString();
+  const rating = formData.get('rating')?.toString();
 
   if (!title || !content || !categoryId || !visibility || !rating) {
     return {
       status: false,
-      error: "필수 필드를 모두 입력해 주세요.",
+      error: '필수 필드를 모두 입력해 주세요.',
     };
   }
 
@@ -26,14 +26,14 @@ export async function createReviewAction(_: any, formData: FormData) {
   };
 
   try {
-    const token = cookies().get("token")?.value;
+    const token = cookies().get('token')?.value;
     const result = await fetch(`http://localhost:3000/reviews`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${token}`,
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
-      credentials: "include",
+      credentials: 'include',
       body: JSON.stringify(data),
     });
 
@@ -43,9 +43,10 @@ export async function createReviewAction(_: any, formData: FormData) {
 
     return {
       status: true,
-      message: "리뷰 작성에 성공했습니다.",
+      message: '리뷰 작성에 성공했습니다.',
     };
-  } catch (err) {
+  }
+  catch (err) {
     return {
       status: false,
       error: `리뷰 작성에 실패했습니다. ${err}`,

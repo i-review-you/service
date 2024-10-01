@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
@@ -12,16 +12,16 @@ const Select = ({ name, options, required = false, ...props }: SelectProps) => {
       <select
         name={name}
         required={required}
-        className="form-element-style appearance-none"
+        className="appearance-none form-element-style"
         {...props}
       >
-        {options.map((option) => (
+        {options.map(option => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
         ))}
       </select>
-      <ChevronDownIcon className="size-4 absolute top-1/2 transform -translate-y-1/2 right-3" />
+      {/* <ChevronDownIcon className="absolute transform -translate-y-1/2 size-4 top-1/2 right-3" /> */}
     </div>
   );
 };
