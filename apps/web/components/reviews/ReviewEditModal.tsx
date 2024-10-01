@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useFormState } from "react-dom";
+import Link from "next/link";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { deleteReviewAction } from "../../action/deleteReviewAction";
 
 export default function ReviewEditModal({ reviewId }: { reviewId: number }) {
@@ -10,8 +11,16 @@ export default function ReviewEditModal({ reviewId }: { reviewId: number }) {
   return (
     <form action={formAction}>
       <input type="text" name="reviewId" value={reviewId} hidden readOnly />
-      <Link href={`/write?id=${reviewId}`}>수정</Link>
-      <button type="submit" disabled={isPending}>
+      <Link className="flex items-center gap-2" href={`/write?id=${reviewId}`}>
+        <PencilSquareIcon className="w-4 h-4" />
+        수정
+      </Link>
+      <button
+        type="submit"
+        disabled={isPending}
+        className="flex items-center gap-2"
+      >
+        <TrashIcon className="w-4 h-4" />
         삭제
       </button>
     </form>

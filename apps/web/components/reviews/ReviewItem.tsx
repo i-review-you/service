@@ -1,59 +1,12 @@
 import Link from 'next/link';
 import dayjs from 'dayjs';
 
-import {
-  StarIcon,
-  UserCircleIcon,
-  EllipsisHorizontalIcon,
-} from '@heroicons/react/24/solid';
-import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
-
-import ReviewActions from './ReviewActions';
+import { reviewDataCamel } from '../../types/review';
+import ReviewHeader from './ReviewHeader';
 import ReviewContents from './ReviewContents';
 import ReviewImages from './ReviewImages';
-import { reviewDataCamel } from '../../types/review';
-import ReviewEditModal from './ReviewEditModal';
-
-function ReviewHeader({
-  userId,
-  rating,
-  reviewId,
-}: {
-  userId: string;
-  rating: number;
-  reviewId: number;
-}) {
-  return (
-    <div className="flex items-center justify-between pb-2">
-      <div className="flex items-center gap-2">
-        <Link
-          href={`/user/${userId}`}
-          className="flex items-center gap-1 cursor-pointer"
-        >
-          <UserCircleIcon className="size-8" />
-          <span>{userId}</span>
-        </Link>
-        <div className="flex">
-          {Array.from({ length: rating })
-            .fill(0)
-            .map((_, index) => (
-              <StarIcon key={index} className="size-5 text-primary" />
-            ))}
-          {Array.from({ length: 5 - rating })
-            .fill(0)
-            .map((_, index) => (
-              <OutlineStarIcon key={index} className="size-5 text-primary" />
-            ))}
-        </div>
-      </div>
-      <div>
-        {/* 내 리뷰때만 보이게 */}
-        <EllipsisHorizontalIcon className="cursor-pointer size-6" />
-        <ReviewEditModal reviewId={reviewId} />
-      </div>
-    </div>
-  );
-}
+import ReviewActions from './ReviewActions';
+import { fetchLikesAction } from '../../action/likesAction';
 
 function ReviewTitle({
   title,
@@ -83,7 +36,7 @@ function ReviewTags({ tags }: { tags?: string[] }) {
   );
 }
 
-export default function ReviewItem({
+export default async function ReviewItem({
   id,
   userId,
   categoryId,
@@ -95,6 +48,8 @@ export default function ReviewItem({
   updatedAt,
   deletedAt,
 }: reviewDataCamel) {
+  const likes = await fetchLikesAction(id);
+
   return (
     <div className="flex flex-col justify-between gap-10 p-4 mb-4 border rounded-lg border-gay-200">
       <div>
@@ -105,7 +60,7 @@ export default function ReviewItem({
       </div>
       <div>
         <ReviewTags />
-        <ReviewActions reviewId={id} title={title} />
+        <ReviewActions reviewId={id} title={title} likes={likes} />
       </div>
     </div>
   );
