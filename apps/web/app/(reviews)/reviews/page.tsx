@@ -1,22 +1,22 @@
-import React from "react";
-import { cookies } from "next/headers";
-import ReviewFilter from "../../../components/reviews/ReviewFilter";
-import ReviewItem from "../../../components/reviews/ReviewItem";
-import { reviewDataSnake } from "../../../types/review";
-import { convertKeysToCamelCase } from "../../../utils/camelCaseUtil";
-import { reviewData } from "../../../types/review";
+import React from 'react';
+import { cookies } from 'next/headers';
+import ReviewFilter from '../../../components/reviews/ReviewFilter';
+import ReviewItem from '../../../components/reviews/ReviewItem';
+import { reviewDataSnake } from '../../../types/review';
+import { convertKeysToCamelCase } from '../../../utils/camelCaseUtil';
+import { reviewData } from '../../../types/review';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 export default async function Page({ searchParams }) {
-  const token = cookies().get("token")?.value;
+  const token = cookies().get('token')?.value;
   const result = await fetch(
     `http://localhost:3000/reviews?myReview=${searchParams.myReview}&categoryId=${searchParams.categoryId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      next: { tags: ["reviews"] },
+      next: { tags: ['reviews'] },
     }
   );
   const reviewsData = await result.json();

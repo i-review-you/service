@@ -1,18 +1,18 @@
-import Link from "next/link";
-import dayjs from "dayjs";
+import Link from 'next/link';
+import dayjs from 'dayjs';
 
 import {
   StarIcon,
   UserCircleIcon,
   EllipsisHorizontalIcon,
-} from "@heroicons/react/24/solid";
-import { StarIcon as OutlineStarIcon } from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/solid';
+import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
 
-import ReviewActions from "./ReviewActions";
-import ReviewContents from "./ReviewContents";
-import ReviewImages from "./ReviewImages";
-import { reviewDataCamel } from "../../types/review";
-import ReviewEditModal from "./ReviewEditModal";
+import ReviewActions from './ReviewActions';
+import ReviewContents from './ReviewContents';
+import ReviewImages from './ReviewImages';
+import { reviewDataCamel } from '../../types/review';
+import ReviewEditModal from './ReviewEditModal';
 
 function ReviewHeader({
   userId,
@@ -65,7 +65,7 @@ function ReviewTitle({
   return (
     <div className="flex justify-between">
       <h3 className="font-bold">{title}</h3>
-      <p>{dayjs(createdAt).format("YYYY.MM.DD")}</p>
+      <p>{dayjs(createdAt).format('YYYY.MM.DD')}</p>
     </div>
   );
 }
