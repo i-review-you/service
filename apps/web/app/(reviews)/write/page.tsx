@@ -80,7 +80,7 @@ export default function Page({
 }) {
   const [state, formAction, isPending] = useFormState(
     searchParams.id ? updateReviewAction : createReviewAction,
-    {}
+    {},
   );
   const router = useRouter();
 
