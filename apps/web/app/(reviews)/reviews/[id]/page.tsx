@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import ReviewItem from '../../../../components/reviews/ReviewItem';
 import { cookies } from 'next/headers';
 
@@ -11,12 +10,19 @@ async function getReviewData(id: string) {
       throw new Error('토큰 없음');
     }
 
-    const response = await axios.get(`http://localhost:3000/reviews/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
+    const response = await fetch(`http://localhost:3000/reviews/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+    if (!response.ok) {
+      throw new Error('리뷰 데이터를 불러오는 중 오류가 발생했습니다.');
+    }
+
+    const data = await response.json();
+    return data;
   }
   catch (error) {
     console.error('리뷰 데이터를 불러오는 중 오류:', error);

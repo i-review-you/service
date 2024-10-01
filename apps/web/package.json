@@ -8,11 +8,10 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
-    "dayjs": "^1.11.13",
     "@i-review-you/react-components": "*",
     "@next/third-parties": "^14.2.13",
+    "dayjs": "^1.11.13",
     "embla-carousel-react": "^8.3.0",
-    "axios": "^1.7.7",
     "next": "^14.2.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
