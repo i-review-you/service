@@ -11,4 +11,7 @@ module.exports = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  env: {
+    API_ORIGIN: process.env.API_ORIGIN,
+  },
 };
