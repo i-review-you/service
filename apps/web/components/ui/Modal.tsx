@@ -26,7 +26,8 @@ const Modal = ({ children, toggleModal, size = "100px" }: ModalProps) => {
   return (
     <div
       ref={modalRef}
-      className={`w-[${size}] border border-gay-200 rounded-lg p-2 absolute right-0 bg-white`}
+      className="border border-gay-200 rounded-lg p-2 absolute right-0 bg-white"
+      style={{ width: size }}
     >
       {children}
     </div>

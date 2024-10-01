@@ -1,11 +1,12 @@
 import Link from "next/link";
 import dayjs from "dayjs";
 
-import ReviewActions from "./ReviewActions";
-import ReviewContents from "./ReviewContents";
-import ReviewImages from "./ReviewImages";
 import { reviewDataCamel } from "../../types/review";
 import ReviewHeader from "./ReviewHeader";
+import ReviewContents from "./ReviewContents";
+import ReviewImages from "./ReviewImages";
+import ReviewActions from "./ReviewActions";
+import { fetchLikesAction } from "../../action/likesAction";
 
 function ReviewTitle({
   title,
@@ -35,7 +36,7 @@ function ReviewTags({ tags }: { tags?: string[] }) {
   );
 }
 
-export default function ReviewItem({
+export default async function ReviewItem({
   id,
   userId,
   categoryId,
@@ -47,6 +48,8 @@ export default function ReviewItem({
   updatedAt,
   deletedAt,
 }: reviewDataCamel) {
+  const likes = await fetchLikesAction(id);
+
   return (
     <div className="flex flex-col justify-between gap-10 rounded-lg border border-gay-200 p-4 mb-4">
       <div>
@@ -57,7 +60,7 @@ export default function ReviewItem({
       </div>
       <div>
         <ReviewTags />
-        <ReviewActions reviewId={id} title={title} />
+        <ReviewActions reviewId={id} title={title} likes={likes} />
       </div>
     </div>
   );

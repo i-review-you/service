@@ -4,7 +4,6 @@ import ReviewFilter from "../../../components/reviews/ReviewFilter";
 import ReviewItem from "../../../components/reviews/ReviewItem";
 import { reviewDataSnake } from "../../../types/review";
 import { convertKeysToCamelCase } from "../../../utils/camelCaseUtil";
-import { reviewData } from "../../../types/review";
 
 export const dynamic = "force-dynamic";
 
