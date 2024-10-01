@@ -8,13 +8,13 @@ export default function ReviewFilter() {
   const currentSearchParams = useSearchParams();
 
   const [showMyReview, setShowMyReview] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>("전체");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   const updateQueryParams = (updatedParams: { [key: string]: any }) => {
     const newParams = new URLSearchParams(currentSearchParams as any);
 
     Object.entries(updatedParams).forEach(([key, value]) => {
-      if (value === undefined || value === "" || value === "전체") {
+      if (value === undefined || value === "") {
         newParams.delete(key);
       } else {
         newParams.set(key, value);
@@ -33,12 +33,12 @@ export default function ReviewFilter() {
   const onChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     setSelectedCategory(selectedValue);
-    updateQueryParams({ category: selectedValue });
+    updateQueryParams({ categoryId: selectedValue });
   };
 
   useEffect(() => {
     setShowMyReview(Boolean(currentSearchParams.get("myReview")));
-    setSelectedCategory(currentSearchParams.get("category") || "전체");
+    setSelectedCategory(currentSearchParams.get("categoryId") || "");
   }, [currentSearchParams]);
 
   return (
@@ -56,10 +56,10 @@ export default function ReviewFilter() {
       </label>
       <div>
         <select value={selectedCategory} onChange={onChangeCategory}>
-          <option>전체</option>
-          <option>카테고리1</option>
-          <option>카테고리2</option>
-          <option>카테고리3</option>
+          <option value={""}>전체</option>
+          <option value={"1"}>카테고리1</option>
+          <option value={"2"}>카테고리2</option>
+          <option value={"3"}>카테고리3</option>
         </select>
       </div>
     </div>

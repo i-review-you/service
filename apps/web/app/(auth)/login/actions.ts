@@ -1,5 +1,6 @@
 'use server';
 import { cookies } from "next/headers";
+import {redirect} from "next/navigation";
 
 export async function login(prevState: any, formData: FormData) {
   const response = await fetch(`http://localhost:3000/auth`, {
@@ -20,5 +21,5 @@ export async function login(prevState: any, formData: FormData) {
   }
   cookies().set('token', result.session.access_token);
 
-  // Mutate data
+  redirect('/');
 }

@@ -1,8 +1,6 @@
 import Link from "next/link";
-import ReviewActions from "./ReviewActions";
-import ReviewContents from "./ReviewContents";
-import ReviewImages from "./ReviewImages";
-import { reviewData } from "../../types/review";
+import dayjs from "dayjs";
+
 import {
   StarIcon,
   UserCircleIcon,
@@ -10,58 +8,74 @@ import {
 } from "@heroicons/react/24/solid";
 import { StarIcon as OutlineStarIcon } from "@heroicons/react/24/outline";
 
+import ReviewActions from "./ReviewActions";
+import ReviewContents from "./ReviewContents";
+import ReviewImages from "./ReviewImages";
+import { reviewDataCamel } from "../../types/review";
+import ReviewEditModal from "./ReviewEditModal";
+
 function ReviewHeader({
-  username,
-  score,
+  userId,
+  rating,
+  reviewId,
 }: {
-  username: string;
-  score: number;
+  userId: string;
+  rating: number;
+  reviewId: number;
 }) {
   return (
     <div className="flex items-center justify-between pb-2">
       <div className="flex items-center gap-2">
         <Link
-          href={"/user/userId"}
+          href={`/user/${userId}`}
           className="flex items-center gap-1 cursor-pointer"
         >
           <UserCircleIcon className="size-8" />
-          <span>{username}</span>
+          <span>{userId}</span>
         </Link>
         <div className="flex">
-          {Array.from({ length: score })
+          {Array.from({ length: rating })
             .fill(0)
             .map((_, index) => (
-              <StarIcon key={index} className="size-4 text-main" />
+              <StarIcon key={index} className="size-5 text-primary" />
             ))}
-          {Array.from({ length: 5 - score })
+          {Array.from({ length: 5 - rating })
             .fill(0)
             .map((_, index) => (
-              <OutlineStarIcon key={index} className="size-4 text-main" />
+              <OutlineStarIcon key={index} className="size-5 text-primary" />
             ))}
         </div>
       </div>
       <div>
         {/* 내 리뷰때만 보이게 */}
         <EllipsisHorizontalIcon className="cursor-pointer size-6" />
+        <ReviewEditModal reviewId={reviewId} />
       </div>
     </div>
   );
 }
 
-function ReviewTitle({ title, createAt }: { title: string; createAt: string }) {
+function ReviewTitle({
+  title,
+  createdAt,
+}: {
+  title: string;
+  createdAt: string;
+}) {
   return (
     <div className="flex justify-between">
       <h3 className="font-bold">{title}</h3>
-      <p>{createAt}</p>
+      <p>{dayjs(createdAt).format("YYYY.MM.DD")}</p>
     </div>
   );
 }
 
-function ReviewTags({ tags }: { tags: string[] }) {
+function ReviewTags({ tags }: { tags?: string[] }) {
+  if (!tags) return;
   return (
     <div className="flex gap-2 pb-2">
       {tags.map((tag, i) => (
-        <Link key={i} href={`/reviews?tag=${tag}`} className="text-main">
+        <Link key={i} href={`/reviews?tag=${tag}`} className="text-primary">
           {`#${tag}`}
         </Link>
       ))}
@@ -71,27 +85,27 @@ function ReviewTags({ tags }: { tags: string[] }) {
 
 export default function ReviewItem({
   id,
-  username,
-  score,
-  images,
+  userId,
+  categoryId,
   title,
-  createAt,
-  contents,
-  tags,
-  likes,
-  link,
-}: reviewData) {
+  content,
+  rating,
+  visibility,
+  createdAt,
+  updatedAt,
+  deletedAt,
+}: reviewDataCamel) {
   return (
     <div className="flex flex-col justify-between gap-10 p-4 mb-4 border rounded-lg border-gay-200">
       <div>
-        <ReviewHeader username={username} score={score} />
-        <ReviewImages images={images} />
-        <ReviewTitle title={title} createAt={createAt} />
-        <ReviewContents contents={contents} />
+        <ReviewHeader userId={userId} rating={rating} reviewId={id} />
+        <ReviewImages />
+        <ReviewTitle title={title} createdAt={createdAt} />
+        <ReviewContents contents={content} />
       </div>
       <div>
-        <ReviewTags tags={tags} />
-        <ReviewActions likes={likes} link={link} reviewId={id} title={title} />
+        <ReviewTags />
+        <ReviewActions reviewId={id} title={title} />
       </div>
     </div>
   );

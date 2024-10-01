@@ -21,6 +21,19 @@ export class ReviewsService {
     return data;
   }
 
+  async getReviewDetail(user, reviewId) {
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('id', reviewId)
+      .eq('user_id', user.id)
+      .is('deleted_at', null)
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+  }
+
   async createReview(user, createReviewDto: CreateReviewDto) {
     const { categoryId, title, content, rating, visibility } = createReviewDto;
     const { data, error } = await supabase.from('reviews').insert([

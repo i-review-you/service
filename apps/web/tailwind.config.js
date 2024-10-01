@@ -1,16 +1,11 @@
+import sharedConfig from '@i-review-you/config-tailwind';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./styles/**/*.{js,ts,jsx,tsx}",
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
+    './styles/**/*.{js,ts,jsx,tsx}',
+    './app/**/*.{js,ts,jsx,tsx}',
+    '../../packages/react-components/**/*.{js,ts,jsx,tsx}',
   ],
-  theme: {
-    extend: {
-      colors: {
-        primary: "#17B16B",
-      },
-    },
-  },
-  plugins: [],
+  presets: [sharedConfig],
 };

@@ -1,0 +1,43 @@
+import {Meta, ColorPalette, ColorItem} from '@storybook/blocks';
+
+<Meta title="Colors"/>
+<ColorPalette>
+    <ColorItem
+        title="theme.color"
+        subtitle="기본 색상"
+        colors={{White: '#FFFFFF', Alabaster: '#F8F8F8', Concrete: '#F3F3F3'}}
+    />
+    <ColorItem
+        title="theme.color.primary"
+        subtitle="기본 색상"
+        colors={{primary: '#17B16B'}}
+    />
+    <ColorItem
+        title="theme.color.secondary"
+        subtitle="세컨드"
+        colors={{secondary: '#D5F263'}}
+    />
+    <ColorItem
+        title="theme.color.focus"
+        subtitle="강조"
+        colors={{focus: '#FBAB4C'}}
+    />
+    <ColorItem
+        title="theme.color.gray"
+        subtitle="Gray"
+        colors={{
+            100: "#EAEAEA",
+            300: "#B7B7B7",
+            500: "#444444",
+            700: "#191919",
+            900: "#121212"
+        }}
+    />
+    <ColorItem
+        title="gradient 테스트"
+        subtitle="사용중인 컬러 아님"
+        colors={{
+            Gradient: 'linear-gradient(to right,white,black)',
+        }}
+    />
+</ColorPalette>

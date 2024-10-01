@@ -15,11 +15,12 @@ body {
   max-width: 768px;
   height: 100vh;
   background-color: #939393;
+  font-family: "SUIT Variable", sans-serif;
 }
 
 main {
   flex-grow: 1;
-  padding: 32px;
+  padding: 140px 32px;
   background-color: white;
 }
 

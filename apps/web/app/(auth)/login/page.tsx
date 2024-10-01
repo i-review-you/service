@@ -5,6 +5,7 @@ import React from "react";
 import { useFormState } from 'react-dom';
 import Image from "next/image";
 import { login } from './actions';
+import { Button } from '@i-review-you/react-components';
 
 export default function Page() {
   const [state, submitAction, isPending] = useFormState(login, {});
@@ -27,13 +28,14 @@ export default function Page() {
         {state && (
           <p className="mt-1 text-red-500">{state.message}</p>
         )}
-        <button
+        <Button
           type="submit"
-          className="mt-12 py-4 block w-full bg-gray-900 text-[20px] text-white text-center font-bold rounded-[10px]"
+          className="mt-12 block w-full"
+          scheme="secondary"
           disabled={isPending}
         >
           로그인
-        </button>
+        </Button>
       </form>
       <div className="flex justify-between">
         <a>비밀번호 초기화</a>
