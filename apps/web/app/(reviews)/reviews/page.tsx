@@ -25,9 +25,7 @@ export default async function Page({ searchParams }) {
     <div>
       <ReviewFilter />
       {reviews.map((review) => (
-        <>
-          <ReviewItem key={review.id} {...convertKeysToCamelCase(review)} />
-        </>
+        <ReviewItem key={review.id} {...convertKeysToCamelCase(review)} />
       ))}
     </div>
   );
