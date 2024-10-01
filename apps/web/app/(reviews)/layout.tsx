@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react";
-import Header from "../../components/layout/Header";
-import FloatingButton from "../../components/layout/FloatingButton";
+import React, { ReactNode } from 'react';
+import Header from '../../components/layout/Header';
+import FloatingButton from '../../components/layout/FloatingButton';
 
 export default function ReviewsLayout({ children }: { children: ReactNode }) {
   return (

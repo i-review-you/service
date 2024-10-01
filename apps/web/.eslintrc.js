@@ -14,8 +14,8 @@ module.exports = {
     sourceType: 'module',
     ecmaVersion: 2020,
   },
-  extends: ['next/core-web-vitals', 'plugin:prettier/recommended'],
-  plugins: ['@stylistic', 'prettier'],
+  extends: 'next/core-web-vitals',
+  plugins: ['@stylistic'],
   rules: {
     ...customized.rules,
   },

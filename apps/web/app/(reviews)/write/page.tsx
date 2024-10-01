@@ -1,36 +1,37 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useFormState } from "react-dom";
-import { createReviewAction } from "./action";
-import { StarIcon } from "@heroicons/react/24/solid";
-import { StarIcon as OutlineStarIcon } from "@heroicons/react/24/outline";
-import Button from "../../../components/reviews/ui/Button";
-import Select from "../../../components/reviews/ui/Select";
-import Input from "../../../components/reviews/ui/Input";
-import Textarea from "../../../components/reviews/ui/Textarea";
-import { useRouter } from "next/navigation";
-import { updateReviewAction } from "../../../action/updateReviewAction";
+import { useState } from 'react';
+import { useFormState } from 'react-dom';
+import { useRouter } from 'next/navigation';
+import { StarIcon } from '@heroicons/react/24/solid';
+import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
 
-type visibilityType = "private" | "followers";
+import { createReviewAction } from './action';
+import { updateReviewAction } from '../../../action/updateReviewAction';
+import Button from '../../../components/ui/Button';
+import Select from '../../../components/ui/Select';
+import Input from '../../../components/ui/Input';
+import Textarea from '../../../components/ui/Textarea';
+
+type visibilityType = 'private' | 'followers';
 
 function WriteVisibility() {
-  const [visibility, setVisibility] = useState<visibilityType>("followers");
+  const [visibility, setVisibility] = useState<visibilityType>('followers');
 
   return (
-    <div className="flex gap-2 py-4 justify-center">
+    <div className="flex justify-center gap-2 py-4">
       <input name="visibility" type="text" hidden value={visibility} readOnly />
       <Button
         label="공개"
         size="small"
-        onClick={() => setVisibility("followers")}
-        scheme={`${visibility === "followers" ? "active" : "inactive"}`}
+        onClick={() => setVisibility('followers')}
+        scheme={`${visibility === 'followers' ? 'active' : 'inactive'}`}
       />
       <Button
         label="비공개"
         size="small"
-        onClick={() => setVisibility("private")}
-        scheme={`${visibility === "private" ? "active" : "inactive"}`}
+        onClick={() => setVisibility('private')}
+        scheme={`${visibility === 'private' ? 'active' : 'inactive'}`}
       />
     </div>
   );
@@ -41,8 +42,8 @@ function WriteRating() {
   const MAX_RATING = 5;
 
   return (
-    <div className="text-center py-4">
-      <h3 className="font-bold text-xl pb-2">만족스러우셨나요?</h3>
+    <div className="py-4 text-center">
+      <h3 className="pb-2 text-xl font-bold">만족스러우셨나요?</h3>
       <div className="relative inline-block">
         <input name="rating" hidden type="number" value={starRating} readOnly />
         <div className="flex">
@@ -56,7 +57,7 @@ function WriteRating() {
               />
             ))}
         </div>
-        <div className="flex absolute top-0 left-0">
+        <div className="absolute top-0 left-0 flex">
           {Array.from({ length: starRating })
             .fill(0)
             .map((_, index) => (
@@ -84,7 +85,7 @@ export default function Page({
   const router = useRouter();
 
   if (state.status) {
-    router.push("/reviews");
+    router.push('/reviews');
   }
 
   return (
@@ -96,7 +97,7 @@ export default function Page({
         hidden
         readOnly
       />
-      <Select name="categoryId" options={[{ value: 1, label: "전체" }]} />
+      <Select name="categoryId" options={[{ value: 1, label: '전체' }]} />
       <Input name="title" placeholder="제목을 입력하세요" required={true} />
       <Textarea name="content" placeholder="리뷰를 작성해주세요" />
       <div>
@@ -108,7 +109,7 @@ export default function Page({
       <WriteRating />
       <Button
         type="submit"
-        label={searchParams.id ? "리뷰 수정" : "리뷰 작성"}
+        label={searchParams.id ? '리뷰 수정' : '리뷰 작성'}
         size="large"
         scheme="primary"
         disabled={isPending}
