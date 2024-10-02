@@ -25,49 +25,27 @@ import { Response } from 'express';
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
+  // 카테고리 ID에 따라 필터링된 리뷰 또는 전체 리뷰를 조회
   @Get()
   @UseGuards(AuthGuard)
-  async getReviewsByCategory(
-    @Res() response: Response,
+  async getReviews(
     @GetCurrentUser() user,
-    @Query('category_id') categoryId: number, // Query로 카테고리 ID를 받음
+    @Query('category_id') categoryId: number | undefined,
+    @Res() res: Response,
   ) {
     try {
-      const reviews = await this.reviewsService.getReviewsByCategory(
-        user,
-        categoryId,
-      );
-
+      const reviews = await this.reviewsService.getReviews(user, categoryId);
       if (!reviews || reviews.length === 0) {
-        throw new NotFoundException('No reviews found for this category');
+        throw new NotFoundException('No reviews found');
       }
-
-      return response.status(200).json({
+      return res.status(HttpStatus.OK).json({
         message: 'Reviews fetched successfully',
         reviews,
       });
     } catch (error) {
-      return response
+      return res
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ message: 'Failed to fetch reviews', error: error.message });
-    }
-  }
-
-  @Get()
-  @UseGuards(AuthGuard)
-  async getReviews(@GetCurrentUser() user, @Res() res: Response) {
-    try {
-      const reviews = await this.reviewsService.getReviews(user);
-      // return res.status(HttpStatus.OK).json(reviews);
-      return res.status(HttpStatus.OK).json({
-        userId: user.id,
-        reviews,
-      });
-    } catch (error) {
-      throw new HttpException(
-        'Failed to fetch reviews',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
     }
   }
 
