@@ -5,8 +5,10 @@ import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import "./carousel.css";
 
-export default function ReviewImages({ images }: { images: string[] }) {
+export default function ReviewImages({ images }: { images?: string[] }) {
   const [emblaRef] = useEmblaCarousel();
+
+  if (!images) return;
 
   return (
     <section className="embla">
@@ -20,6 +22,7 @@ export default function ReviewImages({ images }: { images: string[] }) {
                 alt="Review Image"
                 layout="fill"
                 objectFit="cover"
+                onError={() => "/images/no-image.svg"}
               />
             </div>
           ))}

@@ -103,19 +103,4 @@ export class CategoriesController {
 
     return response.status(204).send(null);
   }
-
-  @Get(':id')
-  @UseGuards(AuthGuard)
-  async getReviewsByCategory(
-    @Res() response: Response,
-    @GetCurrentUser() user,
-    @Param('id') id: number,
-  ) {
-    const reviews = await this.categoriesService.getReviewsByCategory(user, id);
-    if (!reviews || reviews.length === 0) {
-      throw new NotFoundException();
-    }
-
-    return response.status(200).json(reviews);
-  }
 }

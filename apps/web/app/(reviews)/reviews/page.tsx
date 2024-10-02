@@ -1,41 +1,39 @@
-import React from "react";
-import ReviewFilter from "../../../components/reviews/ReviewFilter";
-import ReviewItem from "../../../components/reviews/ReviewItem";
-import { reviewData } from "../../../types/review";
+import React from 'react';
+import { cookies } from 'next/headers';
+import ReviewFilter from '../../../components/reviews/ReviewFilter';
+import ReviewItem from '../../../components/reviews/ReviewItem';
+import { reviewDataSnake } from '../../../types/review';
+import { convertKeysToCamelCase } from '../../../utils/camelCaseUtil';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
-export default async function Page() {
-  const res = await fetch("http://localhost:3000/reviews");
-  const result = await res.json();
-  console.log(result);
-
-  const reviewDummy: reviewData[] = [
+export default async function Page({ searchParams }) {
+  const token = cookies().get('token')?.value;
+  const result = await fetch(
+    `http://localhost:3000/reviews?myReview=${searchParams.myReview}&categoryId=${searchParams.categoryId}`,
     {
-      id: 1,
-      username: "john_doe",
-      score: 4,
-      images: [
-        "/images/no-image.svg",
-        "/images/no-image.svg",
-        "/images/no-image.svg",
-      ],
-      title: "Great Product!",
-      createAt: "2024-09-18",
-      contents:
-        "I really enjoyed using this product. It exceeded my expectations in every way. The build quality is excellent, and the performance is top-notch. Highly recommend!",
-      tags: ["electronics", "gadgets", "top-rated"],
-      likes: 120,
-      link: "https://example.com/review/12345",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      next: { tags: ['reviews'] },
     },
-  ];
+  );
+  const reviewsData = await result.json();
+  const reviews: reviewDataSnake[] = reviewsData.reviews || [];
 
   return (
     <div>
       <ReviewFilter />
-      {reviewDummy.map((review) => (
-        <ReviewItem key={review.id} {...review} />
-      ))}
+      {reviews.length > 0
+        ? (
+            reviews.map(review => (
+              <ReviewItem key={review.id} {...convertKeysToCamelCase(review)} />
+            ))
+          )
+        : (
+            <p>리뷰가 없습니다.</p>
+          )}
+
     </div>
   );
 }

@@ -12,6 +12,8 @@ import {
   UseGuards,
   HttpStatus,
   HttpException,
+  Query,
+  NotFoundException,
 } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/CreateReviewDto';
@@ -22,6 +24,34 @@ import { Response } from 'express';
 @Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
+
+  @Get()
+  @UseGuards(AuthGuard)
+  async getReviewsByCategory(
+    @Res() response: Response,
+    @GetCurrentUser() user,
+    @Query('category_id') categoryId: number, // Query로 카테고리 ID를 받음
+  ) {
+    try {
+      const reviews = await this.reviewsService.getReviewsByCategory(
+        user,
+        categoryId,
+      );
+
+      if (!reviews || reviews.length === 0) {
+        throw new NotFoundException('No reviews found for this category');
+      }
+
+      return response.status(200).json({
+        message: 'Reviews fetched successfully',
+        reviews,
+      });
+    } catch (error) {
+      return response
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Failed to fetch reviews', error: error.message });
+    }
+  }
 
   @Get()
   @UseGuards(AuthGuard)

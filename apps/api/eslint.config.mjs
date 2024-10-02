@@ -1,20 +1,20 @@
-import js from '@eslint/js';
-import tsLint from 'typescript-eslint';
-import stylistic from '@stylistic/eslint-plugin';
+import js from "@eslint/js";
+import tsLint from "typescript-eslint";
+import stylistic from "@stylistic/eslint-plugin";
 
 export default [
   js.configs.recommended,
   ...tsLint.configs.recommended,
   stylistic.configs.customize({
     indent: 2,
-    quotes: 'single',
+    quotes: "single",
     semi: true,
     jsx: false,
   }),
   {
-    files: ['**/*.{js,mjs,cjs,ts,mts,jsx}'],
+    files: ["**/*.{js,mjs,cjs,ts,mts,jsx}"],
     rules: {
       // '@stylistic/ts/indent': ['error', 2],
     },
-
-  }];
+  },
+];

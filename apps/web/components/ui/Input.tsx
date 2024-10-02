@@ -1,4 +1,4 @@
-type InputType = "text" | "email" | "password" | "number" | "nickname" | "file";
+type InputType = 'text' | 'email' | 'password' | 'number' | 'nickname' | 'file';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -9,8 +9,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input = ({
   name,
-  type = "text",
-  placeholder = "",
+  type = 'text',
+  placeholder = '',
   required = false,
   ...props
 }: InputProps) => {

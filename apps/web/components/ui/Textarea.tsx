@@ -7,7 +7,7 @@ interface TextareaProps
 
 const Textarea = ({
   name,
-  placeholder = "",
+  placeholder = '',
   required = false,
   ...props
 }: TextareaProps) => {
