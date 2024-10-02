@@ -9,8 +9,10 @@ export const dynamic = 'force-dynamic';
 
 export default async function Page({ searchParams }) {
   const token = cookies().get('token')?.value;
+  const url = `http://localhost:3000/reviews?category_id=${searchParams.category_id || ''}`;
+
   const result = await fetch(
-    `http://localhost:3000/reviews?myReview=${searchParams.myReview}&categoryId=${searchParams.categoryId}`,
+    url,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -24,13 +26,15 @@ export default async function Page({ searchParams }) {
   return (
     <div>
       <ReviewFilter />
-      {reviews.length > 0 ? (
-        reviews.map((review) => (
-          <ReviewItem key={review.id} {...convertKeysToCamelCase(review)} />
-        ))
-      ) : (
-        <p>리뷰가 없습니다.</p>
-      )}
+      {reviews.length > 0
+        ? (
+            reviews.map(review => (
+              <ReviewItem key={review.id} {...convertKeysToCamelCase(review)} />
+            ))
+          )
+        : (
+            <p>리뷰가 없습니다.</p>
+          )}
     </div>
   );
 }
