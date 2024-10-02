@@ -24,16 +24,13 @@ export default async function Page({ searchParams }) {
   return (
     <div>
       <ReviewFilter />
-      {reviews.length > 0
-        ? (
-            reviews.map(review => (
-              <ReviewItem key={review.id} {...convertKeysToCamelCase(review)} />
-            ))
-          )
-        : (
-            <p>리뷰가 없습니다.</p>
-          )}
-
+      {reviews.length > 0 ? (
+        reviews.map((review) => (
+          <ReviewItem key={review.id} {...convertKeysToCamelCase(review)} />
+        ))
+      ) : (
+        <p>리뷰가 없습니다.</p>
+      )}
     </div>
   );
 }
