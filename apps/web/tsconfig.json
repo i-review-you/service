@@ -16,8 +16,11 @@
       {
         "name": "next"
       }
-    ]
-  },
+    ],
+    "paths": {
+      "@/assets/*": ["./assets/*"]
+    }
+    },
   "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
