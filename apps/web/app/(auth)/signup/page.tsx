@@ -1,5 +1,6 @@
 import Button from '../../../components/ui/Button';
 import React from 'react';
+import Input from '../../../components/ui/Input';
 
 export default function page() {
   return (
@@ -9,9 +10,19 @@ export default function page() {
       <div className="flex flex-col gap-2">
         <h3 className="font-bold">이메일</h3>
         <div className="flex items-center gap-2">
-          <input className="w-full px-3 py-2 border rounded-md" placeholder="이메일" />
+          <Input type="text" required name="email" className="w-full px-3 py-2 border rounded-md" placeholder="이메일" />
           <span>@</span>
-          <input className="w-full px-3 py-2 border rounded-md" />
+          <select
+            name="emailDomain"
+            required
+            className="w-full px-3 py-2 border rounded-md"
+          >
+            <option value="">도메인 선택</option>
+            <option value="gmail.com">gmail.com</option>
+            <option value="naver.com">naver.com</option>
+            <option value="daum.net">daum.net</option>
+            <option value="hotmail.com">hotmail.com</option>
+          </select>
         </div>
         <Button
           size="medium"
@@ -23,7 +34,7 @@ export default function page() {
         <h3 className="font-bold">이메일 인증 코드</h3>
         <form className="flex items-center gap-2">
           <div className="relative w-full">
-            <input className="relative w-full py-2 pl-3 pr-12 border rounded-md" placeholder="이메일로 받은 인증코드를 입력해주세요" />
+            <Input type="text" required name="emailCode" className="relative w-full py-2 pl-3 pr-12 border rounded-md" placeholder="이메일로 받은 인증코드를 입력해주세요" />
             <Button
               size="small"
               label="확인"
@@ -33,7 +44,7 @@ export default function page() {
         </form>
         <div className="flex gap-1 px-4 text-sm">
           <p className="font-extralight">이메일을 받지 못하셨나요?</p>
-          <button>이메일 재선송하기</button>
+          <button>이메일 재전송하기</button>
         </div>
       </div>
       {/* 유저네임 */}
@@ -41,7 +52,7 @@ export default function page() {
         <h3 className="font-bold">유저네임</h3>
         <form className="flex items-center gap-2">
           <div className="relative w-full">
-            <input className="relative w-full px-3 py-2 border rounded-md" placeholder="유저네임" />
+            <Input type="text" required name="username" className="relative w-full py-2 pl-3 pr-20 border rounded-md" placeholder="유저네임" />
             <Button
               size="small"
               label="중복체크"
@@ -55,8 +66,8 @@ export default function page() {
         <h3 className="font-bold">비밀번호</h3>
         <form className="flex items-center gap-2">
           <div className="flex flex-col w-full gap-2 ">
-            <input className="relative w-full px-3 py-2 border rounded-md" placeholder="비밀번호" />
-            <input className="relative w-full px-3 py-2 border rounded-md" placeholder="비밀번호 확인" />
+            <Input type="password" required name="password" className="relative w-full px-3 py-2 border rounded-md" placeholder="비밀번호" />
+            <Input type="password" required name="passwordCheck" className="relative w-full px-3 py-2 border rounded-md" placeholder="비밀번호 확인" />
           </div>
         </form>
       </div>
