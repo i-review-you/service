@@ -13,14 +13,12 @@ a {
 body {
   margin: 0 auto;
   max-width: 768px;
-  height: 100vh;
-  background-color: #939393;
   font-family: "SUIT Variable", sans-serif;
+  width: 100%;
 }
 
 main {
   flex-grow: 1;
-  padding: 140px 32px;
   background-color: white;
 }
 

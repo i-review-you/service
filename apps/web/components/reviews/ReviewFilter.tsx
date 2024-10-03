@@ -14,7 +14,7 @@ export default async function ReviewFilter() {
   const categories = await response.json();
 
   return (
-    <div className="flex justify-between cursor-pointer rounded-lg border border-gay-200 p-4 mb-4">
+    <div className="flex justify-between p-4 mb-4 border rounded-lg cursor-pointer border-gay-200">
       <ReviewFilterCheckbox />
       <ReviewFilterSelect categories={categories} />
     </div>
