@@ -42,7 +42,7 @@ export default function ReviewFilter() {
   }, [currentSearchParams]);
 
   return (
-    <div className="flex justify-between cursor-pointer rounded-lg border border-gay-200 p-4 mb-4">
+    <div className="flex justify-between p-4 mb-4 border rounded-lg cursor-pointer border-gay-200">
       <label htmlFor="showMyReviews" className="flex items-center gap-2">
         <input
           type="checkbox"
@@ -50,7 +50,7 @@ export default function ReviewFilter() {
           name="showMyReviews"
           checked={showMyReview}
           onChange={onChangeMyReview}
-          className="h-5 w-5"
+          className="w-5 h-5"
         />
         <span>내 리뷰만 보기</span>
       </label>

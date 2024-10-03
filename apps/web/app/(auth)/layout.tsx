@@ -1,8 +1,8 @@
-import type {ReactNode} from "react";
+import type { ReactNode } from 'react';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className="px-8 h-full bg-white flex flex-col items-center">
+    <div className="flex flex-col items-center h-full px-8 bg-white">
       {children}
     </div>
   );
