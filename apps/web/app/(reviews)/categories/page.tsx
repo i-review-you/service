@@ -7,7 +7,8 @@ import Form from './_categories';
 export default async function Page() {
   const token = cookies().get('token')?.value;
 
-  const response = await fetch('http://localhost:3000/categories', {
+  const url = new URL('/categories', process.env.API_ORIGIN);
+  const response = await fetch(url, {
     headers: {
       authorization: `Bearer ${token}`,
     },
