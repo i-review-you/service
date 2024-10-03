@@ -38,7 +38,7 @@ jobs:
           cp ./apps/web/Procfile ./apps/web/.next/standalone/apps/web/Procfile
           cp -r ./apps/web/.next/standalone/node_modules ./apps/web/.next/standalone/apps/web/node_modules
           cp -r ./apps/web/.next/static ./apps/web/.next/standalone/apps/web/.next/static
-          cp -r ./apps/web/public ./apps/web/.next/standalone/apps/web/.next/public
+          cp -r ./apps/web/public ./apps/web/.next/standalone/apps/web/public
           cd ./apps/web/.next/standalone/apps/web
           zip -r ../../../../../../${{github.run_id}}.zip .
 
