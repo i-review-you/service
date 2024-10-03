@@ -9,7 +9,7 @@
   "scripts": {
     "check-types": "tsc --noEmit",
     "build": "turbo run build --filter=./apps/*",
-    "build:api": "turbo run build --filter=./apps/api",
+    "build:api": "turbo run build --filter=api",
     "build:web": "turbo run build --filter=web",
     "storybook": "turbo run storybook --filter=@i-review-you/react-components",
     "dev": "turbo run dev",
