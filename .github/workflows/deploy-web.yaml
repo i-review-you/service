@@ -38,7 +38,6 @@ jobs:
           cp -r ./apps/web/.next/static ./apps/web/.next/standalone/apps/web/.next/static
           cp -r ./apps/web/public ./apps/web/.next/standalone/apps/web/.next/public
           cd ./apps/web/.next/standalone/apps/web
-#         beanstalk에서 npm install 방지
           mkdir node_modules
           zip -r ../../../../../../${{github.run_id}}.zip .
 
