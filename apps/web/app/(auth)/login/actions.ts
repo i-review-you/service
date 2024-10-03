@@ -3,7 +3,8 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export async function login(prevState: any, formData: FormData) {
-  const response = await fetch(`http://localhost:3000/auth`, {
+  const url = new URL('/auth', process.env.API_ORIGIN);
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',

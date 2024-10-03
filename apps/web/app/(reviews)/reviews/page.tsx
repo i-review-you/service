@@ -9,8 +9,11 @@ export const dynamic = 'force-dynamic';
 
 export default async function Page({ searchParams }) {
   const token = cookies().get('token')?.value;
+  const url = new URL('/reviews', process.env.API_ORIGIN);
+  url.searchParams.set('category_id', searchParams.category_id || '');
+
   const result = await fetch(
-    `http://localhost:3000/reviews?myReview=${searchParams.myReview}&categoryId=${searchParams.categoryId}`,
+    url,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -33,7 +36,6 @@ export default async function Page({ searchParams }) {
         : (
             <p>리뷰가 없습니다.</p>
           )}
-
     </div>
   );
 }

@@ -1,5 +1,5 @@
 'use client';
-import Logo from './logo-small.svg';
+import Logo from '@/assets/logo-small.svg';
 
 import React from 'react';
 import { useFormState } from 'react-dom';

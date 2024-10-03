@@ -4,35 +4,25 @@ import { CreateReviewDto } from './dto/CreateReviewDto';
 
 const supabase = createClient(
   'https://algsfyxfsvqgthqbmwzr.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZ3NmeXhmc3ZxZ3RocWJtd3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjYxMTEyODgsImV4cCI6MjA0MTY4NzI4OH0.7Y2QUFRraSGmt3NWbSGSUflMx71kjxWCVo8jA5EWjII'
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZ3NmeXhmc3ZxZ3RocWJtd3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjYxMTEyODgsImV4cCI6MjA0MTY4NzI4OH0.7Y2QUFRraSGmt3NWbSGSUflMx71kjxWCVo8jA5EWjII',
 );
 
 @Injectable()
 export class ReviewsService {
-  // 우선 해당 카테고리의 내가 작성한 리뷰들만 조회할 수 있도록 함
-  async getReviewsByCategory(user, categoryId: number) {
-    const { data, error } = await supabase
+  // category_id가 있으면 해당 카테고리 리뷰만, 없으면 전체 리뷰 조회
+  // TODO: 내가 작성한 글 외에 팔로우한 사용자의 글도 조회할 수 있어야 함
+  async getReviews(user, categoryId?: number) {
+    let query = supabase
       .from('reviews')
       .select('*')
-      .eq('category_id', categoryId)
       .eq('user_id', user.id)
       .is('deleted_at', null);
 
-    if (error) {
-      console.error('Error fetching reviews by category:', error.message);
-      throw new Error(error.message);
+    if (categoryId) {
+      query = query.eq('category_id', categoryId);
     }
 
-    return data;
-  }
-
-  // TODO: 내가 작성한 글 외에 팔로우한 사용자의 글도 조회할 수 있어야 함
-  async getReviews(user) {
-    const { data, error } = await supabase
-      .from('reviews')
-      .select('*')
-      .eq('user_id', user.id)
-      .is('deleted_at', null);
+    const { data, error } = await query;
 
     if (error) throw new Error(error.message);
     return data;
