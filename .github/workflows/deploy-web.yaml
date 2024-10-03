@@ -34,8 +34,8 @@ jobs:
 
       - name: Pack
         run: |
-          cp ./apps/web/.next/static ./apps/web/.next/standalone/apps/web/.next/static
-          cp ./apps/web/public ./apps/web/.next/standalone/apps/web/.next/public
+          cp -r ./apps/web/.next/static ./apps/web/.next/standalone/apps/web/.next/static
+          cp -r ./apps/web/public ./apps/web/.next/standalone/apps/web/.next/public
           cd ./apps/web/.next/standalone/apps/web
           zip -r ../../../../../../${{github.run_id}}.zip .
 
