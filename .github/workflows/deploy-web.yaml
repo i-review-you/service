@@ -34,8 +34,10 @@ jobs:
 
       - name: Pack
         run: |
-          cd ./apps/web
-          zip -r ../../${{github.run_id}}.zip .
+          cp ./apps/web/.next/static ./apps/web/.next/standalone/apps/web/.next/static
+          cp ./apps/web/public ./apps/web/.next/standalone/apps/web/.next/public
+          cd ./apps/web/.next/standalone/apps/web
+          zip -r ../../../../../../${{github.run_id}}.zip .
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4.4.0

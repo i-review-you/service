@@ -1,6 +1,8 @@
 const { withSentryConfig } = require('@sentry/nextjs');
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
@@ -21,6 +23,8 @@ const nextConfig = {
 };
 
 module.exports = withSentryConfig(nextConfig, {
+  telemetry: false,
+
   org: 'i-review-you',
   project: 'web',
 
