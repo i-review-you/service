@@ -25,7 +25,8 @@
       "@/assets/*": [
         "./assets/*"
       ]
-    }
+    },
+    "target": "ES2021"
   },
   "include": [
     "next-env.d.ts",

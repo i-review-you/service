@@ -15,6 +15,9 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  experimental: {
+    instrumentationHook: true,
+  },
   env: {
     API_ORIGIN: process.env.API_ORIGIN,
     SENTRY_DSN: process.env.SENTRY_DSN,
@@ -32,4 +35,9 @@ module.exports = withSentryConfig(nextConfig, {
   authToken: process.env.SENTRY_AUTH_TOKEN,
 
   silent: false, // Can be used to suppress logs
+
+  sourcemaps: {
+    disable: true,
+  },
+  hideSourceMaps: true,
 });
