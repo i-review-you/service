@@ -1,20 +1,19 @@
-name: build - api
+name: build - web
 on:
   pull_request:
     paths:
-      - apps/api/**
+      - packages/react-components/**
+      - apps/web/**
     types: [opened, synchronize]
+
+env:
+  TURBO_TELEMETRY_DISABLED: 1
 
 jobs:
   build:
     name: Build and Test
     timeout-minutes: 15
     runs-on: ubuntu-latest
-    # To use Remote Caching, uncomment the next lines and follow the steps below.
-    # env:
-    #  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-    #  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-    #  TURBO_REMOTE_ONLY: true
 
     steps:
       - name: Check out code
@@ -32,5 +31,4 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build:api
-
+        run: npm run build:web
