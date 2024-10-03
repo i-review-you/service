@@ -1,9 +1,10 @@
 name: deploy - web
 on:
-  pull_request:
+  push:
     branches:
       - main
     paths:
+      - packages/react-components/**
       - apps/web/**
 
 env:
