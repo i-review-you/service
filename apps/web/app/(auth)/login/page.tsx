@@ -2,13 +2,13 @@
 import Logo from '@/assets/logo-small.svg';
 
 import React from 'react';
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import Image from 'next/image';
 import { login } from './actions';
 import { Button } from '@i-review-you/react-components';
 
 export default function Page() {
-  const [state, submitAction, isPending] = useFormState(login, {});
+  const [state, submitAction, isPending] = useActionState(login, {});
 
   return (
     <div className="flex flex-col justify-center h-full gap-4">

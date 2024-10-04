@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useFormState } from "react-dom";
-import Link from "next/link";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { deleteReviewAction } from "../../action/deleteReviewAction";
+import { useActionState } from 'react';
+import Link from 'next/link';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { deleteReviewAction } from '../../action/deleteReviewAction';
 
 export default function ReviewEditModal({ reviewId }: { reviewId: number }) {
-  const [state, formAction, isPending] = useFormState(deleteReviewAction, {});
+  const [state, formAction, isPending] = useActionState(deleteReviewAction, {});
 
   return (
     <form action={formAction}>
