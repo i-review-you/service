@@ -1,16 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import Link from 'next/link';
 import {
   EllipsisHorizontalIcon,
   StarIcon,
   UserCircleIcon,
-} from "@heroicons/react/24/solid";
-import { StarIcon as OutlineStarIcon } from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/solid';
+import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
 
-import Modal from "../ui/Modal";
-import ReviewEditModal from "./ReviewEditModal";
+import ReviewEditModal from './ReviewEditModal';
+import { Modal } from '@i-review-you/react-components';
 
 export default function ReviewHeader({
   userId,
@@ -21,12 +20,6 @@ export default function ReviewHeader({
   rating: number;
   reviewId: number;
 }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalOpen((prev) => !prev);
-  };
-
   return (
     <div className="flex justify-between items-center pb-2">
       <div className="flex items-center gap-2">
@@ -50,18 +43,12 @@ export default function ReviewHeader({
             ))}
         </div>
       </div>
-      <div className="relative">
-        {/* 내 리뷰때만 보이게 */}
-        <EllipsisHorizontalIcon
-          className="size-6 cursor-pointer"
-          onClick={toggleModal}
-        />
-        {isModalOpen && (
-          <Modal toggleModal={toggleModal}>
-            <ReviewEditModal reviewId={reviewId} />
-          </Modal>
-        )}
-      </div>
+      <Modal
+        buttonChildren={
+          <EllipsisHorizontalIcon className="size-6 cursor-pointer" />
+        }
+        modalChildren={<ReviewEditModal reviewId={reviewId} />}
+      />
     </div>
   );
 }
