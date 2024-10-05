@@ -1,17 +1,15 @@
 import React, { type ReactNode } from 'react';
-import Header from '../../../../components/layout/Header';
 
 export const metadata = {
-  title: 'I-Reivew-U :: 마이페이지',
+  title: 'I-Reivew-U :: 카테고리관리',
   viewport: 'width=device-width, initial-scale=1.0',
 
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col flex-1 w-full h-full">
-      <Header />
-      <main className="h-full p-4 pt-40 bg-gray-100">{children}</main>
-    </div>
+      <div className="flex flex-col w-full h-full">
+        <div className="h-full">{children}</div>
+      </div>
   );
 }

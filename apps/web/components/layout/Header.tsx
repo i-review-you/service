@@ -10,7 +10,7 @@ export default function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed top-0 left-1/2 transform -translate-x-1/2 max-w-[768px] w-full z-50 flex justify-between bg-white border-b border-gray-200 px-8 pt-16 pb-2">
+    <header className={`${pathname==='/my-page/category' ? 'relative' :'fixed'} top-0 left-1/2 transform -translate-x-1/2 max-w-[768px] w-full z-50 flex justify-between bg-white border-b border-gray-200 px-8 pt-16 pb-2`}>
       <Link href="/">
         <Image
           src={LogoSmall}
