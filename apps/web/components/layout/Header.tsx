@@ -20,7 +20,7 @@ export default function Header() {
           objectFit="cover"
         />
       </Link>
-      {!pathname.startsWith('/my-page') && (
+      {pathname !== '/my-page' && (
         <Link href="/user">
           <UserCircleIcon className="size-10" />
         </Link>
