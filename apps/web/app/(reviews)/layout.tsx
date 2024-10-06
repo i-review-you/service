@@ -31,7 +31,7 @@ export default function ReviewsLayout({ children }: { children: ReactNode }) {
           </Link>
         )}
       </header>
-      <main className="p-3.5">{children}</main>
+      <main>{children}</main>
       <FloatingButton />
     </div>
   );
