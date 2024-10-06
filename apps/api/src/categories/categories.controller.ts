@@ -80,7 +80,6 @@ export class CategoriesController {
   @ApiBody({ type: CategoryDTO.Create })
   @ApiParam({ name: 'id', required: true })
   async update(@GetCurrentUser() user, @Body() body, @Param('id') id: number) {
-    console.log('와라 여기');
     return await this.categoriesService.update(user, { id, ...body });
   }
 
