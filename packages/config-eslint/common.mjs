@@ -18,5 +18,10 @@ export default [
       // '@stylistic/ts/indent': ['error', 2],
     },
   },
-  json.configs.recommended,
+  {
+    files: ['**/*.json'],
+    ignores: ['package-lock.json'],
+    language: 'json/json',
+    ...json.configs.recommended,
+  },
 ];
