@@ -22,7 +22,6 @@ export default function ReviewsLayout({ children }: { children: ReactNode }) {
             alt="I Review U"
             width={131}
             height={100}
-            objectFit="cover"
           />
         </Link>
         {!pathname.startsWith('/my-page') && (
@@ -31,7 +30,7 @@ export default function ReviewsLayout({ children }: { children: ReactNode }) {
           </Link>
         )}
       </header>
-      <main className="p-3.5">{children}</main>
+      <main className="grow">{children}</main>
       <FloatingButton />
     </div>
   );

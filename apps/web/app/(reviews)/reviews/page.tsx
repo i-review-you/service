@@ -25,7 +25,7 @@ export default async function Page({ searchParams }) {
   const reviews: reviewDataSnake[] = reviewsData.reviews || [];
 
   return (
-    <div>
+    <div className="px-3.5 pt-2">
       <ReviewFilter />
       {reviews.length > 0
         ? (
