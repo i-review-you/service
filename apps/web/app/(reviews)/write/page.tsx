@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import { useRouter } from 'next/navigation';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
@@ -78,9 +78,9 @@ export default function Page({
 }: {
   searchParams: { id?: string };
 }) {
-  const [state, formAction, isPending] = useFormState(
+  const [state, formAction, isPending] = useActionState(
     searchParams.id ? updateReviewAction : createReviewAction,
-    {},
+    {}
   );
   const router = useRouter();
 

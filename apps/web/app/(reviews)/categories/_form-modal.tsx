@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Dialog } from '@i-review-you/react-components';
 
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import { updateCategories } from './actions';
 
 export default function FormModal({ selectedCategory, onClose }) {
-  const [state, submitAction, isPending] = useFormState(updateCategories, {});
+  const [state, submitAction, isPending] = useActionState(updateCategories, {});
 
   return (
     <Dialog isOpen setIsOpen={onClose}>
@@ -29,9 +29,7 @@ export default function FormModal({ selectedCategory, onClose }) {
                 value="followers"
                 defaultChecked={selectedCategory.visibility === 'followers'}
               />
-              <div
-                className="text-center border py-3.5 rounded-[10px] font-bold text-gray-300 border-gray-100 peer-checked:text-[#17B16B] peer-checked:border-[#17B16B]"
-              >
+              <div className="text-center border py-3.5 rounded-[10px] font-bold text-gray-300 border-gray-100 peer-checked:text-[#17B16B] peer-checked:border-[#17B16B]">
                 팔로워 공개
               </div>
             </label>
@@ -50,8 +48,12 @@ export default function FormModal({ selectedCategory, onClose }) {
           </div>
         </div>
         <div className="mt-5 flex justify-end gap-3">
-          <Button size="small" onClick={onClose}>닫기</Button>
-          <Button type="submit" size="small">저장</Button>
+          <Button size="small" onClick={onClose}>
+            닫기
+          </Button>
+          <Button type="submit" size="small">
+            저장
+          </Button>
         </div>
       </form>
     </Dialog>
