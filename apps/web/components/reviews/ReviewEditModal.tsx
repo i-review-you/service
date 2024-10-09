@@ -11,7 +11,7 @@ export default function ReviewEditModal({ reviewId }: { reviewId: number }) {
   return (
     <form action={formAction}>
       <input type="text" name="reviewId" value={reviewId} hidden readOnly />
-      <Link className="flex items-center gap-2" href={`/write?id=${reviewId}`}>
+      <Link className="flex items-center gap-2" href={`/reviews/${reviewId}/edit`}>
         <PencilSquareIcon className="w-4 h-4" />
         수정
       </Link>
