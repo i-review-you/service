@@ -1,17 +1,62 @@
 'use client';
-
-import { useState } from 'react';
-import { useActionState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useActionState } from 'react';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
-
-import { createReviewAction } from './action';
-import { updateReviewAction } from '../../../action/updateReviewAction';
-import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Textarea from '../../../components/ui/Textarea';
-import Categories from './_categories';
+import Button from '../../../components/ui/Button';
+
+import Categories from './_form-categories';
+
+import { updateReviewAction } from '../../../action/updateReviewAction';
+import { createReviewAction } from './action';
+
+export default function Form({ review }) {
+  const [state, formAction, isPending] = useActionState(
+    review.id ? updateReviewAction : createReviewAction,
+    {},
+  );
+
+  return (
+    <form action={formAction} className="bg-gray-100 h-full flex flex-col justify-between">
+      <div className="px-3.5">
+        {review.id && (
+          <input
+            type="hidden"
+            name="reviewId"
+            value={review.id}
+            readOnly
+          />
+        )}
+        <Categories />
+        <Input
+            name="title"
+            placeholder="제목을 입력하세요"
+            required={true}
+            defaultValue={review?.title}
+        />
+        <Textarea name="content" placeholder="리뷰를 작성해주세요" defaultValue={review?.content} />
+        {/* <div> */}
+        {/*  <Input type="file" name="imageUpload" placeholder="이미지 업로드" /> */}
+        {/* </div> */}
+        {/* <Input name="tag" placeholder="태그" /> */}
+        {/* <Input name="link" placeholder="링크추가" /> */}
+        <WriteVisibility />
+        <WriteRating />
+      </div>
+      <button
+        type="submit"
+        className="pt-4 block w-full text-center text-[20px] font-bold text-white bg-primary disabled:bg-gray-300"
+        disabled={isPending}
+        style={{
+          paddingBottom: 'calc(1rem + env(safe-area-inset-bottom))',
+        }}
+      >
+        {review.id ? '리뷰 수정' : '리뷰 작성'}
+      </button>
+    </form>
+  );
+}
 
 type visibilityType = 'private' | 'followers';
 
@@ -70,55 +115,5 @@ function WriteRating() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function Page({
-  searchParams,
-}: {
-  searchParams: { id?: string };
-}) {
-  const [state, formAction, isPending] = useActionState(
-    searchParams.id ? updateReviewAction : createReviewAction,
-    {},
-  );
-  const router = useRouter();
-
-  if (state.status) {
-    router.push('/reviews');
-  }
-
-  return (
-    <form action={formAction} className="bg-gray-100 h-full flex flex-col justify-between">
-      <div className="px-3.5">
-        <input
-          type="text"
-          name="reviewId"
-          value={searchParams.id}
-          hidden
-          readOnly
-        />
-        <Categories />
-        <Input name="title" placeholder="제목을 입력하세요" required={true} />
-        <Textarea name="content" placeholder="리뷰를 작성해주세요" />
-        {/*<div>*/}
-        {/*  <Input type="file" name="imageUpload" placeholder="이미지 업로드" />*/}
-        {/*</div>*/}
-        {/* <Input name="tag" placeholder="태그" /> */}
-        {/* <Input name="link" placeholder="링크추가" /> */}
-        <WriteVisibility />
-        <WriteRating />
-      </div>
-      <button
-        type="submit"
-        className="pt-4 block w-full text-center text-[20px] font-bold text-white bg-primary disabled:bg-gray-300"
-        disabled={isPending}
-        style={{
-          paddingBottom: 'calc(1rem + env(safe-area-inset-bottom))',
-        }}
-      >
-        {searchParams.id ? '리뷰 수정' : '리뷰 작성'}
-      </button>
-    </form>
   );
 }
