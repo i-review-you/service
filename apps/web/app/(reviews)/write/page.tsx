@@ -9,9 +9,9 @@ import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
 import { createReviewAction } from './action';
 import { updateReviewAction } from '../../../action/updateReviewAction';
 import Button from '../../../components/ui/Button';
-import Select from '../../../components/ui/Select';
 import Input from '../../../components/ui/Input';
 import Textarea from '../../../components/ui/Textarea';
+import Categories from './_categories';
 
 type visibilityType = 'private' | 'followers';
 
@@ -22,7 +22,7 @@ function WriteVisibility() {
     <div className="flex justify-center gap-2 py-4">
       <input name="visibility" type="text" hidden value={visibility} readOnly />
       <Button
-        label="공개"
+        label="팔로워 공개"
         size="small"
         onClick={() => setVisibility('followers')}
         scheme={`${visibility === 'followers' ? 'active' : 'inactive'}`}
@@ -80,7 +80,7 @@ export default function Page({
 }) {
   const [state, formAction, isPending] = useActionState(
     searchParams.id ? updateReviewAction : createReviewAction,
-    {}
+    {},
   );
   const router = useRouter();
 
@@ -89,31 +89,36 @@ export default function Page({
   }
 
   return (
-    <form action={formAction}>
-      <input
-        type="text"
-        name="reviewId"
-        value={searchParams.id}
-        hidden
-        readOnly
-      />
-      <Select name="categoryId" options={[{ value: 1, label: '전체' }]} />
-      <Input name="title" placeholder="제목을 입력하세요" required={true} />
-      <Textarea name="content" placeholder="리뷰를 작성해주세요" />
-      <div>
-        <Input type="file" name="imageUpload" placeholder="이미지 업로드" />
+    <form action={formAction} className="bg-gray-100 h-full flex flex-col justify-between">
+      <div className="px-3.5">
+        <input
+          type="text"
+          name="reviewId"
+          value={searchParams.id}
+          hidden
+          readOnly
+        />
+        <Categories />
+        <Input name="title" placeholder="제목을 입력하세요" required={true} />
+        <Textarea name="content" placeholder="리뷰를 작성해주세요" />
+        {/*<div>*/}
+        {/*  <Input type="file" name="imageUpload" placeholder="이미지 업로드" />*/}
+        {/*</div>*/}
+        {/* <Input name="tag" placeholder="태그" /> */}
+        {/* <Input name="link" placeholder="링크추가" /> */}
+        <WriteVisibility />
+        <WriteRating />
       </div>
-      <Input name="tag" placeholder="태그" />
-      <Input name="link" placeholder="링크추가" />
-      <WriteVisibility />
-      <WriteRating />
-      <Button
+      <button
         type="submit"
-        label={searchParams.id ? '리뷰 수정' : '리뷰 작성'}
-        size="large"
-        scheme="primary"
+        className="pt-4 block w-full text-center text-[20px] font-bold text-white bg-primary disabled:bg-gray-300"
         disabled={isPending}
-      />
+        style={{
+          paddingBottom: 'calc(1rem + env(safe-area-inset-bottom))',
+        }}
+      >
+        {searchParams.id ? '리뷰 수정' : '리뷰 작성'}
+      </button>
     </form>
   );
 }
