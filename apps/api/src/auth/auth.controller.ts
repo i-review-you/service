@@ -13,4 +13,19 @@ export class AuthController {
   ) {
     return await this.authService.login(email, password);
   }
+
+  @Post('signup')
+  async signup(
+      @Body('email') email: string,
+      @Body('password') password: string,
+  ) {
+    return await this.authService.signup(email, password);
+  }
+
+  @Post('confirm')
+  async confirm(
+      @Body('token') token: string,
+  ) {
+    return await this.authService.confirm(token);
+  }
 }
