@@ -14,7 +14,23 @@ export class ReviewsService {
   async getReviews(user, categoryId?: number) {
     let query = supabase
       .from('reviews')
-      .select('*,profile(username)')
+      .select(`
+        id,
+        title,
+        content,
+        rating,
+        visibility,
+        category:category_id (
+          id,
+          name,
+          visibility
+        ),
+        author:profile (
+          avatarUrl:avatar_url,
+          name,
+          username
+        )
+      `)
       .eq('user_id', user.id)
       .is('deleted_at', null)
       .order('created_at', { ascending: false });
@@ -23,13 +39,7 @@ export class ReviewsService {
 
     if (error) throw new Error(error.message);
 
-    const formattedData = data.map((review) => ({
-      ...review,
-      username: review.profile.username,
-      profile: undefined,
-    }));
-
-    return formattedData;
+    return data;
   }
 
   async getReviewDetail(user, reviewId) {
