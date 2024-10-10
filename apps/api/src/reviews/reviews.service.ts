@@ -37,7 +37,6 @@ export class ReviewsService {
 
     const { data, error } = await query;
 
-    console.log('efweew', data);
     if (error) throw new Error(error.message);
 
     return data;
