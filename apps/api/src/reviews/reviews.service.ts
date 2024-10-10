@@ -14,31 +14,40 @@ export class ReviewsService {
   async getReviews(user, categoryId?: number) {
     let query = supabase
       .from('reviews')
-      .select('*')
+      .select('*,profile(username)')
       .eq('user_id', user.id)
-      .is('deleted_at', null);
-
-    if (categoryId) {
-      query = query.eq('category_id', categoryId);
-    }
+      .is('deleted_at', null)
+      .order('created_at', { ascending: false });
 
     const { data, error } = await query;
 
     if (error) throw new Error(error.message);
-    return data;
+
+    const formattedData = data.map((review) => ({
+      ...review,
+      username: review.profile.username,
+      profile: undefined,
+    }));
+
+    return formattedData;
   }
 
   async getReviewDetail(user, reviewId) {
     const { data, error } = await supabase
       .from('reviews')
-      .select('*')
+      .select('*, profile(username)')
       .eq('id', reviewId)
       .eq('user_id', user.id)
       .is('deleted_at', null)
       .single();
 
     if (error) throw new Error(error.message);
-    return data;
+
+    return {
+      ...data,
+      username: data?.profile?.username,
+      profile: undefined,
+    };
   }
 
   async createReview(user, createReviewDto: CreateReviewDto) {
