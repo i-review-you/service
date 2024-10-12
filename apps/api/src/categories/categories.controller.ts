@@ -19,13 +19,8 @@ import { GetCurrentUser } from '../auth/auth.decorator';
 // eslint-disable-next-line @typescript-eslint/no-namespace
 namespace CategoryDTO {
   export class Create {
-    @ApiProperty({ description: '카테고리명', default: '카테고리1' })
     name: string;
-
-    @ApiProperty({ description: '카테고리 순서', default: 1 })
     sort_order: number;
-
-    @ApiProperty({ description: '카테고리 공개 범위', default: 'private' })
     visibility: 'public' | 'private';
   }
 }
