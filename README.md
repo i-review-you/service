@@ -37,3 +37,6 @@ npm run dev
 
 ## 로그인 로직
 로그인을 하게되면 Next.js에서 쿠키를 통해 토큰을 관리하게 됩니다. 이 토큰을 백엔드에 요청할 때 authorization 헤더에 첨부하게 되면 백엔드에서는 이 토큰을 통해 로그인 여부를 판단합니다.
+
+## POSTMAN
+https://www.postman.com/galactic-station-753083/workspace/i-review-you
