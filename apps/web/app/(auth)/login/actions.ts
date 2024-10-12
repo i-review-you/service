@@ -20,7 +20,7 @@ export async function login(prevState: any, formData: FormData) {
       message: '아이디 혹은 비밀번호를 확인해주세요',
     };
   }
-  console.log(result);
+
   cookies().set('token', result.session.access_token, {
     expires: new Date(result.session.expires_at * 1000),
   });

@@ -11,7 +11,7 @@ export default function Page() {
   const [state, submitAction, isPending] = useActionState(login, {});
 
   return (
-    <div className="flex flex-col justify-center flex-1 h-full gap-4">
+    <div className="px-8 flex flex-col justify-center flex-1 h-full gap-4">
       <Image src={Logo} alt="로고" />
       <form action={submitAction}>
         <input
