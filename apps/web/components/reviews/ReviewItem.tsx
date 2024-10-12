@@ -38,22 +38,21 @@ function ReviewTags({ tags }: { tags?: string[] }) {
 
 export default async function ReviewItem({
   id,
-  userId,
-  categoryId,
+  author,
+  category,
   title,
   content,
   rating,
   visibility,
   createdAt,
   updatedAt,
-  deletedAt,
 }: reviewDataCamel) {
   const likes = await fetchLikesAction(id);
 
   return (
     <div className="flex flex-col justify-between gap-10 p-4 mb-4 border rounded-lg border-gay-200">
       <div>
-        <ReviewHeader userId={userId} rating={rating} reviewId={id} />
+        <ReviewHeader user={author} rating={rating} reviewId={id} />
         <ReviewImages />
         <ReviewTitle title={title} createdAt={createdAt} />
         <ReviewContents contents={content} />
