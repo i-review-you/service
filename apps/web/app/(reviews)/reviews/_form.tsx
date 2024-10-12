@@ -30,10 +30,10 @@ export default function Form({ review }) {
         )}
         <Categories />
         <Input
-            name="title"
-            placeholder="제목을 입력하세요"
-            required={true}
-            defaultValue={review?.title}
+          name="title"
+          placeholder="제목을 입력하세요"
+          required={true}
+          defaultValue={review?.title}
         />
         <Textarea name="content" placeholder="리뷰를 작성해주세요" defaultValue={review?.content} />
         {/* <div> */}
