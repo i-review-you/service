@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient('https://algsfyxfsvqgthqbmwzr.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsZ3NmeXhmc3ZxZ3RocWJtd3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjYxMTEyODgsImV4cCI6MjA0MTY4NzI4OH0.7Y2QUFRraSGmt3NWbSGSUflMx71kjxWCVo8jA5EWjII');
@@ -59,6 +59,7 @@ export class CategoriesService {
   }
 
   async delete(user, { id }) {
+    console.log('엥? 뭔데');
     const categoryResponse = await supabase
       .from('categories')
       .select('*')
@@ -66,7 +67,7 @@ export class CategoriesService {
       .eq('user_id', user.id)
       .is('deleted_at', null);
 
-    if (!categoryResponse.data) {
+    if (!(categoryResponse.data?.length > 0)) {
       throw new NotFoundException();
     }
 
@@ -76,18 +77,23 @@ export class CategoriesService {
       .eq('category_id', Number(id))
       .is('deleted_at', null);
 
+    console.log('gkdlgkdl,', reviewsCount);
     if (reviewsCount > 0) {
-      throw new Error('해당 카테고리에 리뷰가 있으면 삭제할 수 없습니다');
+      throw new HttpException({
+        message: '해당 카테고리에 리뷰가 있으면 삭제할 수 없습니다',
+      }, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    const { count } = await supabase
+    const { count: categoriesCount } = await supabase
       .from('categories')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', user.id)
-      .eq('deleted_at', null);
+      .is('deleted_at', null);
 
-    if (count <= 1) {
-      throw new Error('최소 하나 이상의 카테고리가 존재해야합니다.');
+    if (categoriesCount <= 1) {
+      throw new HttpException({
+        message: '최소 하나 이상의 카테고리가 존재해야합니다',
+      }, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     const { data, error } = await supabase
