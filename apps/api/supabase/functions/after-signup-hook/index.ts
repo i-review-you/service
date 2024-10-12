@@ -22,6 +22,15 @@ Deno.serve(async (req) => {
       avatar_url: `https://avatar.iran.liara.run/public/boy?username=${randomUsername}`,
     });
 
+  await supabase
+    .from('categories')
+    .insert({
+      user_id: payload.record.id,
+      name: '기본',
+      sort_order: 1,
+      visibility: 'private',
+    });
+
   if (error) {
     console.log(error);
     throw new Error();
