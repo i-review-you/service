@@ -20,6 +20,8 @@ export class ReviewsService {
         content,
         rating,
         visibility,
+        createdAt: created_at,
+        updatedAt: updated_at,
         category:category_id (
           id,
           name,
