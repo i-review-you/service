@@ -59,7 +59,6 @@ export class CategoriesService {
   }
 
   async delete(user, { id }) {
-    console.log('엥? 뭔데');
     const categoryResponse = await supabase
       .from('categories')
       .select('*')
@@ -77,7 +76,6 @@ export class CategoriesService {
       .eq('category_id', Number(id))
       .is('deleted_at', null);
 
-    console.log('gkdlgkdl,', reviewsCount);
     if (reviewsCount > 0) {
       throw new HttpException({
         message: '해당 카테고리에 리뷰가 있으면 삭제할 수 없습니다',
