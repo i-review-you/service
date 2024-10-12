@@ -19,9 +19,9 @@ const nextConfig = {
     instrumentationHook: true,
   },
   env: {
-    API_ORIGIN: process.env.API_ORIGIN,
-    SENTRY_DSN: process.env.SENTRY_DSN,
-    SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+    // API_ORIGIN: process.env.API_ORIGIN,
+    // SENTRY_DSN: process.env.SENTRY_DSN,
+    // SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
   },
 };
 
