@@ -13,6 +13,24 @@ export class AuthService {
     return data;
   }
 
+  async signup(email, password) {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: 'https://example.com/welcome',
+      },
+    });
+    console.log('왜,', error);
+    return data;
+  }
+
+  async confirm(token: string) {
+    const { data, error } = await supabase.auth.verifyOtp({ token_hash: token, type: 'email' });
+    console.log('결과는?', data, error);
+    return data;
+  }
+
   async getUser(jwt) {
     const { data, error } = await supabase.auth.getUser(jwt);
 
