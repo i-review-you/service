@@ -34,6 +34,7 @@ jobs:
       - name: Pack
         run: |
           cd ./apps/api
+          mkdir node_modules
           zip -r ../../${{github.run_id}}.zip .
 
       - name: Upload Artifacts
