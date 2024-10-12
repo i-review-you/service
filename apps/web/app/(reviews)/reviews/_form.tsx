@@ -13,14 +13,14 @@ import { createReviewAction } from './action';
 
 export default function Form({ review }) {
   const [state, formAction, isPending] = useActionState(
-    review.id ? updateReviewAction : createReviewAction,
+    review?.id ? updateReviewAction : createReviewAction,
     {},
   );
 
   return (
     <form action={formAction} className="bg-gray-100 h-full flex flex-col justify-between">
       <div className="px-3.5">
-        {review.id && (
+        {review?.id && (
           <input
             type="hidden"
             name="reviewId"
@@ -30,10 +30,10 @@ export default function Form({ review }) {
         )}
         <Categories />
         <Input
-            name="title"
-            placeholder="제목을 입력하세요"
-            required={true}
-            defaultValue={review?.title}
+          name="title"
+          placeholder="제목을 입력하세요"
+          required={true}
+          defaultValue={review?.title}
         />
         <Textarea name="content" placeholder="리뷰를 작성해주세요" defaultValue={review?.content} />
         {/* <div> */}
@@ -52,7 +52,7 @@ export default function Form({ review }) {
           paddingBottom: 'calc(1rem + env(safe-area-inset-bottom))',
         }}
       >
-        {review.id ? '리뷰 수정' : '리뷰 작성'}
+        {review?.id ? '리뷰 수정' : '리뷰 작성'}
       </button>
     </form>
   );

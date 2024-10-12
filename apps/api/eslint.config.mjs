@@ -1,4 +1,4 @@
-import common from '@i-review-you/config-eslint/common.mjs';
+import common from '../../packages/config-eslint/common.mjs';
 
 export default [
   ...common,
