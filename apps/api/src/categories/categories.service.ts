@@ -16,8 +16,12 @@ export class CategoriesService {
             visibility
             `)
       .eq('user_id', user.id)
-      .is('deleted_at', null)
-      .order('sort_order', { ascending: true });
+      .is('deleted_at', null);
+
+    if (Array.isArray(data) && data.length > 0) {
+      return data.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
+    }
+
     return data;
   }
 

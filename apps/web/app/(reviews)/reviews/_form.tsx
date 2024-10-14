@@ -8,12 +8,10 @@ import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
 
 import { createReviewAction } from './action';
 import { updateReviewAction } from '../../../action/updateReviewAction';
-import {
-  Button,
-  Input,
-  Select,
-  Textarea,
-} from '@i-review-you/react-components';
+import Button from '../../../components/ui/Button';
+import Select from '../../../components/ui/Select';
+import Input from '../../../components/ui/Input';
+import Textarea from '../../../components/ui/Textarea';
 
 type visibilityType = 'private' | 'followers';
 
@@ -24,19 +22,17 @@ function WriteVisibility() {
     <div className="flex justify-center gap-2 py-4">
       <input name="visibility" type="text" hidden value={visibility} readOnly />
       <Button
+        label="공개"
         size="small"
         onClick={() => setVisibility('followers')}
         scheme={`${visibility === 'followers' ? 'active' : 'inactive'}`}
-      >
-        공개
-      </Button>
+      />
       <Button
+        label="비공개"
         size="small"
         onClick={() => setVisibility('private')}
         scheme={`${visibility === 'private' ? 'active' : 'inactive'}`}
-      >
-        비공개
-      </Button>
+      />
     </div>
   );
 }
@@ -111,9 +107,13 @@ export default function Page({
       <Input name="link" placeholder="링크추가" />
       <WriteVisibility />
       <WriteRating />
-      <Button type="submit" size="large" scheme="primary" disabled={isPending}>
-        {searchParams.id ? '리뷰 수정' : '리뷰 작성'}
-      </Button>
+      <Button
+        type="submit"
+        label={searchParams.id ? '리뷰 수정' : '리뷰 작성'}
+        size="large"
+        scheme="primary"
+        disabled={isPending}
+      />
     </form>
   );
 }

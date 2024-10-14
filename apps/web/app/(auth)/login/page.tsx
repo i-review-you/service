@@ -2,16 +2,16 @@
 import Logo from '@/assets/logo-small.svg';
 
 import React from 'react';
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import Image from 'next/image';
 import { login } from './actions';
 import { Button } from '@i-review-you/react-components';
 
 export default function Page() {
-  const [state, submitAction, isPending] = useFormState(login, {});
+  const [state, submitAction, isPending] = useActionState(login, {});
 
   return (
-    <div className="flex flex-col justify-center h-full gap-4">
+    <div className="px-8 flex flex-col justify-center flex-1 h-full gap-4">
       <Image src={Logo} alt="로고" />
       <form action={submitAction}>
         <input

@@ -1,4 +1,5 @@
 'use client';
+'use client';
 
 import Link from 'next/link';
 import {
@@ -12,11 +13,11 @@ import ReviewEditModal from './ReviewEditModal';
 import { Modal } from '@i-review-you/react-components';
 
 export default function ReviewHeader({
-  userId,
+  user,
   rating,
   reviewId,
 }: {
-  userId: string;
+  user: any;
   rating: number;
   reviewId: number;
 }) {
@@ -24,11 +25,15 @@ export default function ReviewHeader({
     <div className="flex justify-between items-center pb-2">
       <div className="flex items-center gap-2">
         <Link
-          href={`/user/${userId}`}
+          href={`/users/${user.username}`}
           className="flex items-center gap-1 cursor-pointer"
         >
-          <UserCircleIcon className="size-8" />
-          <span>{userId}</span>
+          {user.avatarUrl ? (
+            <img src={user.avatarUrl} className="size-8" />
+          ) : (
+            <UserCircleIcon className="size-8" />
+          )}
+          <span>{user.name}</span>
         </Link>
         <div className="flex">
           {Array.from({ length: rating })
