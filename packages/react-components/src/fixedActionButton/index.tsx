@@ -2,14 +2,12 @@ import React, { type ComponentPropsWithoutRef } from 'react';
 import { clsx } from 'clsx';
 
 interface ButtonProps extends ComponentPropsWithoutRef<'button'> {
-  size?: 'large' | 'medium' | 'small';
   scheme?: 'primary' | 'secondary' | 'active' | 'inactive';
 }
 
-export function Button({
+export function FixedActionButton({
   className,
   type = 'button',
-  size = 'medium',
   scheme = 'primary',
   ...props
 }: ButtonProps) {
@@ -18,11 +16,7 @@ export function Button({
       type={type}
       className={clsx(
         className,
-        'font-bold',
-        size === 'large' &&
-          'fixed z-50 bottom-0 left-1/2 transform -translate-x-1/2 w-[768px] px-6 pt-4 pb-12 text-xl',
-        size === 'medium' && 'w-full rounded-[10px] py-4 text-lg',
-        size === 'small' && 'w-[150px] rounded-[10px] py-2',
+        'font-bold fixed z-50 bottom-0 left-1/2 transform -translate-x-1/2 w-[768px] px-6 pt-4 pb-12 text-xl',
         scheme === 'primary' && 'bg-primary text-white',
         scheme === 'secondary' && 'bg-black text-white',
         scheme === 'active' && 'bg-white text-primary border border-primary',
