@@ -2,7 +2,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
-  options: Array<{ value: number; label: string }>;
+  options: Array<{ value: any; label: string }>;
   required?: boolean;
 }
 
