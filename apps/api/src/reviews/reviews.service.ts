@@ -9,12 +9,11 @@ const supabase = createClient(
 
 @Injectable()
 export class ReviewsService {
-  // category_id가 있으면 해당 카테고리 리뷰만, 없으면 전체 리뷰 조회
-  // TODO: 내가 작성한 글 외에 팔로우한 사용자의 글도 조회할 수 있어야 함
-  async getReviews(user, categoryId?: number) {
+  async getReviews(user, categoryId?: number, myReview?: boolean) {
     let query = supabase
       .from('reviews')
-      .select(`
+      .select(
+        `
         id,
         title,
         content,
@@ -32,10 +31,41 @@ export class ReviewsService {
           name,
           username
         )
-      `)
-      .eq('user_id', user.id)
+      `,
+      )
       .is('deleted_at', null)
       .order('created_at', { ascending: false });
+
+    if (!myReview) {
+      const { data: followingData, error: followingError } = await supabase
+        .from('follows')
+        .select('following_id')
+        .eq('user_id', user.id)
+        .is('deleted_at', null);
+
+      if (followingError) throw new Error(followingError.message);
+
+      const followingIds = followingData.map((follow) => follow.following_id);
+
+      if (followingIds.length > 0) {
+        const userCondition = `user_id.eq.${user.id}`;
+
+        const followingCondition = followingIds
+          .map((id) => `user_id.eq.${id}`)
+          .map((id) => `visibility.eq.followers`)
+          .join(',');
+
+        query = query.or(`${userCondition},${followingCondition}`);
+      } else {
+        query = query.eq('user_id', user.id);
+      }
+    } else {
+      query = query.eq('user_id', user.id);
+    }
+
+    if (categoryId) {
+      query = query.eq('category_id', categoryId);
+    }
 
     const { data, error } = await query;
 
