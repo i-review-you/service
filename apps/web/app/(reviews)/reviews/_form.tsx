@@ -14,19 +14,17 @@ import { createReviewAction } from './action';
 export default function Form({ review }) {
   const [state, formAction, isPending] = useActionState(
     review?.id ? updateReviewAction : createReviewAction,
-    {},
+    {}
   );
 
   return (
-    <form action={formAction} className="bg-gray-100 h-full flex flex-col justify-between">
+    <form
+      action={formAction}
+      className="bg-gray-100 h-full flex flex-col justify-between"
+    >
       <div className="px-3.5">
         {review?.id && (
-          <input
-            type="hidden"
-            name="reviewId"
-            value={review.id}
-            readOnly
-          />
+          <input type="hidden" name="reviewId" value={review.id} readOnly />
         )}
         <Categories />
         <Input
@@ -35,14 +33,18 @@ export default function Form({ review }) {
           required={true}
           defaultValue={review?.title}
         />
-        <Textarea name="content" placeholder="리뷰를 작성해주세요" defaultValue={review?.content} />
+        <Textarea
+          name="content"
+          placeholder="리뷰를 작성해주세요"
+          defaultValue={review?.content}
+        />
         {/* <div> */}
         {/*  <Input type="file" name="imageUpload" placeholder="이미지 업로드" /> */}
         {/* </div> */}
         {/* <Input name="tag" placeholder="태그" /> */}
         {/* <Input name="link" placeholder="링크추가" /> */}
-        <WriteVisibility />
-        <WriteRating />
+        <WriteVisibility defaultValue={review?.visibility} />
+        <WriteRating defaultValue={review?.rating} />
       </div>
       <button
         type="submit"
@@ -60,8 +62,10 @@ export default function Form({ review }) {
 
 type visibilityType = 'private' | 'followers';
 
-function WriteVisibility() {
-  const [visibility, setVisibility] = useState<visibilityType>('followers');
+function WriteVisibility({ defaultValue }: { defaultValue?: visibilityType }) {
+  const [visibility, setVisibility] = useState<visibilityType>(
+    defaultValue || 'followers'
+  );
 
   return (
     <div className="flex justify-center gap-2 py-4">
@@ -82,8 +86,8 @@ function WriteVisibility() {
   );
 }
 
-function WriteRating() {
-  const [starRating, setStarRating] = useState<number>(0);
+function WriteRating({ defaultValue }: { defaultValue?: number }) {
+  const [starRating, setStarRating] = useState<number>(defaultValue || 0);
   const MAX_RATING = 5;
 
   return (
