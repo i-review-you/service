@@ -1,6 +1,6 @@
 'use client';
+'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import {
   EllipsisHorizontalIcon,
@@ -9,8 +9,8 @@ import {
 } from '@heroicons/react/24/solid';
 import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
 
-import Modal from '../ui/Modal';
 import ReviewEditModal from './ReviewEditModal';
+import { Modal } from '@i-review-you/react-components';
 
 export default function ReviewHeader({
   user,
@@ -21,12 +21,6 @@ export default function ReviewHeader({
   rating: number;
   reviewId: number;
 }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalOpen(prev => !prev);
-  };
-
   return (
     <div className="flex justify-between items-center pb-2">
       <div className="flex items-center gap-2">
@@ -34,14 +28,11 @@ export default function ReviewHeader({
           href={`/users/${user.username}`}
           className="flex items-center gap-1 cursor-pointer"
         >
-          {user.avatarUrl
-            ? (
-                <img src={user.avatarUrl} className="size-8" />
-              )
-            : (
-
-                <UserCircleIcon className="size-8" />
-              )}
+          {user.avatarUrl ? (
+            <img src={user.avatarUrl} className="size-8" />
+          ) : (
+            <UserCircleIcon className="size-8" />
+          )}
           <span>{user.name}</span>
         </Link>
         <div className="flex">
@@ -57,18 +48,12 @@ export default function ReviewHeader({
             ))}
         </div>
       </div>
-      <div className="relative">
-        {/* 내 리뷰때만 보이게 */}
-        <EllipsisHorizontalIcon
-          className="size-6 cursor-pointer"
-          onClick={toggleModal}
-        />
-        {isModalOpen && (
-          <Modal toggleModal={toggleModal}>
-            <ReviewEditModal reviewId={reviewId} />
-          </Modal>
-        )}
-      </div>
+      <Modal
+        buttonChildren={
+          <EllipsisHorizontalIcon className="size-6 cursor-pointer" />
+        }
+        modalChildren={<ReviewEditModal reviewId={reviewId} />}
+      />
     </div>
   );
 }

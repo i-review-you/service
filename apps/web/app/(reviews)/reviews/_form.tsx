@@ -2,9 +2,12 @@
 import { useState, useActionState } from 'react';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
-import Input from '../../../components/ui/Input';
-import Textarea from '../../../components/ui/Textarea';
-import Button from '../../../components/ui/Button';
+import {
+  Button,
+  Input,
+  Textarea,
+  FixedActionButton,
+} from '@i-review-you/react-components';
 
 import Categories from './_form-categories';
 
@@ -46,16 +49,9 @@ export default function Form({ review }) {
         <WriteVisibility defaultValue={review?.visibility} />
         <WriteRating defaultValue={review?.rating} />
       </div>
-      <button
-        type="submit"
-        className="pt-4 block w-full text-center text-[20px] font-bold text-white bg-primary disabled:bg-gray-300"
-        disabled={isPending}
-        style={{
-          paddingBottom: 'calc(1rem + env(safe-area-inset-bottom))',
-        }}
-      >
+      <FixedActionButton type="submit" scheme="primary" disabled={isPending}>
         {review?.id ? '리뷰 수정' : '리뷰 작성'}
-      </button>
+      </FixedActionButton>
     </form>
   );
 }
@@ -71,17 +67,19 @@ function WriteVisibility({ defaultValue }: { defaultValue?: visibilityType }) {
     <div className="flex justify-center gap-2 py-4">
       <input name="visibility" type="text" hidden value={visibility} readOnly />
       <Button
-        label="팔로워 공개"
         size="small"
         onClick={() => setVisibility('followers')}
         scheme={`${visibility === 'followers' ? 'active' : 'inactive'}`}
-      />
+      >
+        팔로워 공개
+      </Button>
       <Button
-        label="비공개"
         size="small"
         onClick={() => setVisibility('private')}
         scheme={`${visibility === 'private' ? 'active' : 'inactive'}`}
-      />
+      >
+        비공개
+      </Button>
     </div>
   );
 }
