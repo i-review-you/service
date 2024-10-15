@@ -1,5 +1,3 @@
-/* eslint-disable @stylistic/brace-style */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -25,16 +23,22 @@ import { Response } from 'express';
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
-  // 카테고리 ID에 따라 필터링된 리뷰 또는 전체 리뷰를 조회
   @Get()
   @UseGuards(AuthGuard)
   async getReviews(
     @GetCurrentUser() user,
     @Query('category_id') categoryId: number | undefined,
+    @Query('myReview') myReview: string | undefined,
     @Res() res: Response,
   ) {
     try {
-      const reviews = await this.reviewsService.getReviews(user, categoryId);
+      const myReviewsBoolean = myReview === 'true';
+
+      const reviews = await this.reviewsService.getReviews(
+        user,
+        categoryId,
+        myReviewsBoolean,
+      );
       if (!reviews || reviews.length === 0) {
         throw new NotFoundException('No reviews found');
       }
