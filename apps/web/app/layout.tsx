@@ -3,6 +3,14 @@ import './globals.css';
 import React, { type ReactNode } from 'react';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
+export const metadata = {
+  title: 'I-Reivew-U',
+  viewport: 'width=device-width, initial-scale=1.0',
+  icons: {
+    icon: '/favicon.ico',
+  },
+};
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko" className="h-full">
@@ -12,9 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
         />
       </head>
-      <body className="h-full">
-        {children}
-      </body>
+      <body className="h-full">{children}</body>
       {/* <GoogleAnalytics gaId="필요함" /> */}
     </html>
   );
