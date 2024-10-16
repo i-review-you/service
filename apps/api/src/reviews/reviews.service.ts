@@ -1,3 +1,7 @@
+/* eslint-disable @stylistic/operator-linebreak */
+/* eslint-disable @stylistic/brace-style */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @stylistic/arrow-parens */
 import { Injectable } from '@nestjs/common';
 import { createClient } from '@supabase/supabase-js';
 import { CreateReviewDto } from './dto/CreateReviewDto';
@@ -93,22 +97,57 @@ export class ReviewsService {
   }
 
   async createReview(user, createReviewDto: CreateReviewDto) {
-    const { categoryId, title, content, rating, visibility } = createReviewDto;
-    const { data, error } = await supabase.from('reviews').insert([
-      {
-        category_id: categoryId,
-        user_id: user.id,
-        title,
-        content,
-        rating,
-        visibility,
+    const { categoryId, title, content, rating, visibility, tags, links } =
+      createReviewDto;
+
+    const { data: reviewData, error: reviewError } = await supabase
+      .from('reviews')
+      .insert([
+        {
+          category_id: categoryId,
+          user_id: user.id,
+          title,
+          content,
+          rating,
+          visibility,
+          created_at: new Date(),
+          deleted_at: null,
+        },
+      ])
+      .select('id');
+
+    if (reviewError) throw new Error(reviewError.message);
+
+    const reviewId = reviewData[0].id;
+
+    if (tags && tags.length > 0) {
+      const tagData = tags.map((tag) => ({
+        review_id: reviewId,
+        name: tag,
         created_at: new Date(),
         deleted_at: null,
-      },
-    ]);
+      }));
+      const { error: tagError } = await supabase
+        .from('review_tags')
+        .insert(tagData);
+      if (tagError) throw new Error(tagError.message);
+    }
 
-    if (error) throw new Error(error.message);
-    return data;
+    if (links && links.length > 0) {
+      const linkData = links.map((link) => ({
+        review_id: reviewId,
+        name: link.name,
+        href: link.href,
+        created_at: new Date(),
+        deleted_at: null,
+      }));
+      const { error: linkError } = await supabase
+        .from('review_links')
+        .insert(linkData);
+      if (linkError) throw new Error(linkError.message);
+    }
+
+    return reviewData;
   }
 
   async updateReview(user, reviewId: number, createReviewDto: CreateReviewDto) {
