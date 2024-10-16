@@ -79,9 +79,11 @@ export class ReviewsService {
   }
 
   async getReviewDetail(user, reviewId) {
-    const { data, error } = await supabase
+    const { data: reviewData, error } = await supabase
       .from('reviews')
-      .select('*, profile(username)')
+      .select(
+        '*, profile(username), review_tags(name), review_links(name, href)',
+      )
       .eq('id', reviewId)
       .eq('user_id', user.id)
       .is('deleted_at', null)
@@ -90,8 +92,8 @@ export class ReviewsService {
     if (error) throw new Error(error.message);
 
     return {
-      ...data,
-      username: data?.profile?.username,
+      ...reviewData,
+      username: reviewData?.profile?.username,
       profile: undefined,
     };
   }
