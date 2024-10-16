@@ -1,7 +1,3 @@
-/* eslint-disable @stylistic/operator-linebreak */
-/* eslint-disable @stylistic/brace-style */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @stylistic/arrow-parens */
 import { Injectable } from '@nestjs/common';
 import { createClient } from '@supabase/supabase-js';
 import { CreateReviewDto } from './dto/CreateReviewDto';
