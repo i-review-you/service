@@ -9,7 +9,12 @@ const supabase = createClient(
 
 @Injectable()
 export class ReviewsService {
-  async getReviews(user, categoryId?: number, myReview?: boolean) {
+  async getReviews(
+    user,
+    categoryId?: number,
+    myReview?: boolean,
+    tagName?: string,
+  ) {
     let query = supabase
       .from('reviews')
       .select(
@@ -30,7 +35,9 @@ export class ReviewsService {
           avatarUrl:avatar_url,
           name,
           username
-        )
+        ),
+        tags:review_tags(name, deleted_at),
+        links:review_links(name, href, deleted_at)
       `,
       )
       .is('deleted_at', null)
@@ -67,17 +74,55 @@ export class ReviewsService {
       query = query.eq('category_id', categoryId);
     }
 
+    const { data: reviews, error: reviewsError } = await query;
+
+    if (reviewsError) throw new Error(reviewsError.message);
+
+    if (tagName) {
+      const reviewIds = reviews.map((review) => review.id);
+
+      const { data: tagData, error: tagError } = await supabase
+        .from('review_tags')
+        .select('review_id')
+        .eq('name', tagName)
+        .is('deleted_at', null);
+
+      if (tagError) throw new Error(tagError.message);
+
+      const filteredReviewIds = tagData.map((item) => item.review_id);
+
+      const filteredReviews = reviews.filter((review) =>
+        filteredReviewIds.includes(review.id),
+      );
+
+      return filteredReviews.map((review) => {
+        return {
+          ...review,
+          tags: review.tags.filter((tag) => tag.deleted_at === null),
+          links: review.links.filter((link) => link.deleted_at === null),
+        };
+      });
+    }
+
     const { data, error } = await query;
 
     if (error) throw new Error(error.message);
 
-    return data;
+    return data.map((review) => {
+      return {
+        ...review,
+        tags: review.tags.filter((tag) => tag.deleted_at === null),
+        links: review.links.filter((link) => link.deleted_at === null),
+      };
+    });
   }
 
   async getReviewDetail(user, reviewId) {
-    const { data, error } = await supabase
+    const { data: reviewData, error } = await supabase
       .from('reviews')
-      .select('*, profile(username)')
+      .select(
+        '*, profile(username), review_tags(name), review_links(name, href)',
+      )
       .eq('id', reviewId)
       .eq('user_id', user.id)
       .is('deleted_at', null)
@@ -86,33 +131,71 @@ export class ReviewsService {
     if (error) throw new Error(error.message);
 
     return {
-      ...data,
-      username: data?.profile?.username,
+      ...reviewData,
+      username: reviewData?.profile?.username,
       profile: undefined,
     };
   }
 
   async createReview(user, createReviewDto: CreateReviewDto) {
-    const { categoryId, title, content, rating, visibility } = createReviewDto;
-    const { data, error } = await supabase.from('reviews').insert([
-      {
-        category_id: categoryId,
-        user_id: user.id,
-        title,
-        content,
-        rating,
-        visibility,
+    const { categoryId, title, content, rating, visibility, tags, links } =
+      createReviewDto;
+
+    const { data: reviewData, error: reviewError } = await supabase
+      .from('reviews')
+      .insert([
+        {
+          category_id: categoryId,
+          user_id: user.id,
+          title,
+          content,
+          rating,
+          visibility,
+          created_at: new Date(),
+          deleted_at: null,
+        },
+      ])
+      .select('id');
+
+    if (reviewError) throw new Error(reviewError.message);
+
+    const reviewId = reviewData[0].id;
+
+    if (tags && tags.length > 0) {
+      const tagData = tags.map((tag) => ({
+        review_id: reviewId,
+        name: tag,
         created_at: new Date(),
         deleted_at: null,
-      },
-    ]);
+      }));
+      const { error: tagError } = await supabase
+        .from('review_tags')
+        .insert(tagData);
+      if (tagError) throw new Error(tagError.message);
+    }
 
-    if (error) throw new Error(error.message);
-    return data;
+    if (links && links.length > 0) {
+      const linkData = links.map((link) => ({
+        review_id: reviewId,
+        name: link.name,
+        href: link.href,
+        created_at: new Date(),
+        deleted_at: null,
+      }));
+      const { error: linkError } = await supabase
+        .from('review_links')
+        .insert(linkData);
+      if (linkError) throw new Error(linkError.message);
+    }
+
+    return reviewData;
   }
 
   async updateReview(user, reviewId: number, createReviewDto: CreateReviewDto) {
-    const { categoryId, title, content, rating, visibility } = createReviewDto;
+    const { categoryId, title, content, rating, visibility, tags, links } =
+      createReviewDto;
+
+    // 리뷰 기본 정보 업데이트
     const { data, error } = await supabase
       .from('reviews')
       .update({
@@ -125,9 +208,50 @@ export class ReviewsService {
       })
       .eq('id', reviewId)
       .eq('user_id', user.id)
-      .is('deleted_at', null); // 삭제된 리뷰는 수정할 수 없도록 필터링
-
+      .is('deleted_at', null);
     if (error) throw new Error(error.message);
+
+    await supabase
+      .from('review_tags')
+      .update({ deleted_at: new Date() })
+      .eq('review_id', reviewId)
+      .is('deleted_at', null);
+
+    if (tags && tags.length > 0) {
+      const tagData = tags.map((tag) => ({
+        review_id: reviewId,
+        name: tag,
+        created_at: new Date(),
+        deleted_at: null,
+      }));
+
+      const { error: tagError } = await supabase
+        .from('review_tags')
+        .insert(tagData);
+      if (tagError) throw new Error(tagError.message);
+    }
+
+    await supabase
+      .from('review_links')
+      .update({ deleted_at: new Date() })
+      .eq('review_id', reviewId)
+      .is('deleted_at', null);
+
+    if (links && links.length > 0) {
+      const linkData = links.map((link) => ({
+        review_id: reviewId,
+        name: link.name,
+        href: link.href,
+        created_at: new Date(),
+        deleted_at: null,
+      }));
+
+      const { error: linkError } = await supabase
+        .from('review_links')
+        .insert(linkData);
+      if (linkError) throw new Error(linkError.message);
+    }
+
     return data;
   }
 
