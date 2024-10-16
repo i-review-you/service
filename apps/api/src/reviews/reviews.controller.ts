@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @stylistic/brace-style */
 import {
   Body,
   Controller,
@@ -29,6 +31,7 @@ export class ReviewsController {
     @GetCurrentUser() user,
     @Query('category_id') categoryId: number | undefined,
     @Query('myReview') myReview: string | undefined,
+    @Query('tagName') tagName: string | undefined,
     @Res() res: Response,
   ) {
     try {
@@ -38,6 +41,7 @@ export class ReviewsController {
         user,
         categoryId,
         myReviewsBoolean,
+        tagName,
       );
       if (!reviews || reviews.length === 0) {
         throw new NotFoundException('No reviews found');

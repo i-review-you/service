@@ -13,7 +13,12 @@ const supabase = createClient(
 
 @Injectable()
 export class ReviewsService {
-  async getReviews(user, categoryId?: number, myReview?: boolean) {
+  async getReviews(
+    user,
+    categoryId?: number,
+    myReview?: boolean,
+    tagName?: string,
+  ) {
     let query = supabase
       .from('reviews')
       .select(
@@ -34,7 +39,9 @@ export class ReviewsService {
           avatarUrl:avatar_url,
           name,
           username
-        )
+        ),
+        tags:review_tags(name),
+        links:review_links(name, href)
       `,
       )
       .is('deleted_at', null)
@@ -69,6 +76,32 @@ export class ReviewsService {
 
     if (categoryId) {
       query = query.eq('category_id', categoryId);
+    }
+
+    const { data: reviews, error: reviewsError } = await query;
+
+    if (reviewsError) throw new Error(reviewsError.message);
+
+    if (tagName) {
+      const reviewIds = reviews.map((review) => review.id);
+
+      const { data: tagData, error: tagError } = await supabase
+        .from('review_tags')
+        .select('review_id')
+        .eq('name', tagName)
+        .is('deleted_at', null);
+
+      if (tagError) throw new Error(tagError.message);
+
+      // 리뷰 아이디를 포함한 배열 생성
+      const filteredReviewIds = tagData.map((item) => item.review_id);
+
+      // 태그가 있는 리뷰만 필터링
+      const filteredReviews = reviews.filter((review) =>
+        filteredReviewIds.includes(review.id),
+      );
+
+      return filteredReviews;
     }
 
     const { data, error } = await query;
