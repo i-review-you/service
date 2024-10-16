@@ -40,8 +40,8 @@ export class ReviewsService {
           name,
           username
         ),
-        tags:review_tags(name),
-        links:review_links(name, href)
+        tags:review_tags(name, deleted_at),
+        links:review_links(name, href, deleted_at)
       `,
       )
       .is('deleted_at', null)
@@ -93,22 +93,32 @@ export class ReviewsService {
 
       if (tagError) throw new Error(tagError.message);
 
-      // 리뷰 아이디를 포함한 배열 생성
       const filteredReviewIds = tagData.map((item) => item.review_id);
 
-      // 태그가 있는 리뷰만 필터링
       const filteredReviews = reviews.filter((review) =>
         filteredReviewIds.includes(review.id),
       );
 
-      return filteredReviews;
+      return filteredReviews.map((review) => {
+        return {
+          ...review,
+          tags: review.tags.filter((tag) => tag.deleted_at === null),
+          links: review.links.filter((link) => link.deleted_at === null),
+        };
+      });
     }
 
     const { data, error } = await query;
 
     if (error) throw new Error(error.message);
 
-    return data;
+    return data.map((review) => {
+      return {
+        ...review,
+        tags: review.tags.filter((tag) => tag.deleted_at === null),
+        links: review.links.filter((link) => link.deleted_at === null),
+      };
+    });
   }
 
   async getReviewDetail(user, reviewId) {
@@ -186,7 +196,10 @@ export class ReviewsService {
   }
 
   async updateReview(user, reviewId: number, createReviewDto: CreateReviewDto) {
-    const { categoryId, title, content, rating, visibility } = createReviewDto;
+    const { categoryId, title, content, rating, visibility, tags, links } =
+      createReviewDto;
+
+    // 리뷰 기본 정보 업데이트
     const { data, error } = await supabase
       .from('reviews')
       .update({
@@ -199,9 +212,50 @@ export class ReviewsService {
       })
       .eq('id', reviewId)
       .eq('user_id', user.id)
-      .is('deleted_at', null); // 삭제된 리뷰는 수정할 수 없도록 필터링
-
+      .is('deleted_at', null);
     if (error) throw new Error(error.message);
+
+    await supabase
+      .from('review_tags')
+      .update({ deleted_at: new Date() })
+      .eq('review_id', reviewId)
+      .is('deleted_at', null);
+
+    if (tags && tags.length > 0) {
+      const tagData = tags.map((tag) => ({
+        review_id: reviewId,
+        name: tag,
+        created_at: new Date(),
+        deleted_at: null,
+      }));
+
+      const { error: tagError } = await supabase
+        .from('review_tags')
+        .insert(tagData);
+      if (tagError) throw new Error(tagError.message);
+    }
+
+    await supabase
+      .from('review_links')
+      .update({ deleted_at: new Date() })
+      .eq('review_id', reviewId)
+      .is('deleted_at', null);
+
+    if (links && links.length > 0) {
+      const linkData = links.map((link) => ({
+        review_id: reviewId,
+        name: link.name,
+        href: link.href,
+        created_at: new Date(),
+        deleted_at: null,
+      }));
+
+      const { error: linkError } = await supabase
+        .from('review_links')
+        .insert(linkData);
+      if (linkError) throw new Error(linkError.message);
+    }
+
     return data;
   }
 
