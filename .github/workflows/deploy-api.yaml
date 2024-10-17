@@ -1,6 +1,6 @@
 name: deploy - api
 on:
-  push:
+  pull_request:
     branches:
       - main
     paths:
@@ -27,7 +27,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: |  
+        run: |
           npm install --workspaces=false
           npm install --workspace=api
 
@@ -38,8 +38,8 @@ jobs:
 
       - name: Pack
         run: |
-          cp ./Procfile ./apps/api/Procfile
-          zip -r ${{github.run_id}}.zip .
+          cp ./apps/api/Procfile ./Procfile
+          zip -r -y -q ${{github.run_id}}.zip .
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4.4.0
