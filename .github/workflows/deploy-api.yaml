@@ -27,15 +27,19 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: |  
+          npm install --workspaces=false
+          npm install --workspace=api
 
       - name: Build
-        run: npm run build:api
+        run: |
+          npm run build:api
+          npm uninstall turbo --workspaces=false
 
       - name: Pack
         run: |
-          cd ./apps/api
-          zip -r ../../${{github.run_id}}.zip .
+          cp ./Procfile ./apps/api/Procfile
+          zip -r ${{github.run_id}}.zip .
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4.4.0
