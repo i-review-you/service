@@ -52,7 +52,7 @@ export class ReviewsService {
 
       if (followingError) throw new Error(followingError.message);
 
-      const followingIds = followingData.map((follow) => follow.following_id);
+      const followingIds = followingData.map(follow => follow.following_id);
 
       if (followingIds.length > 0) {
         const followingReviews = supabase
