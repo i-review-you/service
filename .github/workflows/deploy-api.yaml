@@ -34,7 +34,7 @@ jobs:
       - name: Build
         run: |
           npm run build:api
-          npm uninstall turbo
+          npm uninstall turbo --workspaces=false
 
       - name: Pack
         run: |
