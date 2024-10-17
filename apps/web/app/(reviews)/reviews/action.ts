@@ -9,6 +9,8 @@ export async function createReviewAction(_: any, formData: FormData) {
   const categoryId = formData.get('categoryId')?.toString();
   const visibility = formData.get('visibility')?.toString();
   const rating = formData.get('rating')?.toString();
+  const tags = formData.get('tags')?.toString();
+  const links = formData.get('links')?.toString();
 
   if (!title || !content || !categoryId || !visibility || !rating) {
     return {
@@ -23,6 +25,7 @@ export async function createReviewAction(_: any, formData: FormData) {
     categoryId: parseInt(categoryId),
     visibility,
     rating,
+    tags: tags.split(' '),
   };
 
   try {
@@ -31,7 +34,7 @@ export async function createReviewAction(_: any, formData: FormData) {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       credentials: 'include',
       body: JSON.stringify(data),
@@ -40,13 +43,12 @@ export async function createReviewAction(_: any, formData: FormData) {
     if (!result.ok) {
       throw new Error(result.statusText);
     }
-
+    revalidatePath('/reviews');
     return {
       status: true,
-      message: '리뷰 작성에 성공했습니다.',
+      error: '리뷰 작성에 성공했습니다.',
     };
-  }
-  catch (err) {
+  } catch (err) {
     return {
       status: false,
       error: `리뷰 작성에 실패했습니다. ${err}`,

@@ -1,5 +1,6 @@
 'use client';
-import { useState, useActionState } from 'react';
+import { useState, useActionState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
 import {
@@ -7,18 +8,24 @@ import {
   Input,
   Textarea,
   FixedActionButton,
+  Select,
 } from '@i-review-you/react-components';
-
-import Categories from './_form-categories';
 
 import { updateReviewAction } from '../../../action/updateReviewAction';
 import { createReviewAction } from './action';
 
-export default function Form({ review }) {
+export default function Form({ review, categories }) {
+  const router = useRouter();
   const [state, formAction, isPending] = useActionState(
     review?.id ? updateReviewAction : createReviewAction,
     {}
   );
+
+  useEffect(() => {
+    if (state?.status === true) {
+      router.push('/reviews');
+    }
+  }, [state, router]);
 
   return (
     <form
@@ -29,7 +36,13 @@ export default function Form({ review }) {
         {review?.id && (
           <input type="hidden" name="reviewId" value={review.id} readOnly />
         )}
-        <Categories />
+        <Select
+          name="categoryId"
+          options={categories.map((category) => ({
+            value: category.id,
+            label: category.name,
+          }))}
+        />
         <Input
           name="title"
           placeholder="제목을 입력하세요"
@@ -44,8 +57,12 @@ export default function Form({ review }) {
         {/* <div> */}
         {/*  <Input type="file" name="imageUpload" placeholder="이미지 업로드" /> */}
         {/* </div> */}
-        {/* <Input name="tag" placeholder="태그" /> */}
-        {/* <Input name="link" placeholder="링크추가" /> */}
+        <Input
+          name="tags"
+          placeholder="태그"
+          defaultValue={review?.review_tags.map((tag) => tag.name).join(' ')}
+        />
+        {/* <Input name="links" placeholder="링크추가" /> */}
         <WriteVisibility defaultValue={review?.visibility} />
         <WriteRating defaultValue={review?.rating} />
       </div>
