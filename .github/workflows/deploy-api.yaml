@@ -38,6 +38,7 @@ jobs:
 
       - name: Pack
         run: |
+          cp ./Procfile ./apps/api/Procfile
           zip -r ${{github.run_id}}.zip .
 
       - name: Upload Artifacts
