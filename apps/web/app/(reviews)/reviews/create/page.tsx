@@ -9,7 +9,17 @@ export default async function Page({ params: { id } }) {
     redirect('/login');
   }
 
+  const url = new URL('/categories', process.env.API_ORIGIN);
+  const response = await fetch(url, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
+  const categories = await response.json();
+
   return (
-    <Form />
+    <>
+      <Form categories={categories} />
+    </>
   );
 }
