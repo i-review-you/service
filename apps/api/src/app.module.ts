@@ -6,9 +6,10 @@ import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
 import { LikesModule } from './likes/likes.module';
 import { UsersModule } from './users/users.module';
+import { MyPageModule } from './mypage/mypage.module';
 
 @Module({
-  imports: [ReviewsModule, AuthModule, CategoriesModule, LikesModule, UsersModule],
+  imports: [ReviewsModule, AuthModule, CategoriesModule, LikesModule, UsersModule, MyPageModule],
   controllers: [AppController],
   providers: [AppService],
 })
