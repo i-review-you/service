@@ -29,7 +29,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install --workspaces=false
+          npm install --workspace=api
 
       - name: Build
         run: npm run build:api
