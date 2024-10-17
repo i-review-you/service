@@ -38,8 +38,8 @@ jobs:
 
       - name: Pack
         run: |
-          cp ./Procfile ./apps/api/Procfile
-          zip -r ${{github.run_id}}.zip .
+          cp ./apps/api/Procfile ./Procfile
+          zip -r -y -q ${{github.run_id}}.zip .
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4.4.0
