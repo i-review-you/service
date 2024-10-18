@@ -35,9 +35,3 @@ jobs:
 
       - name: Build
         run: npm run build:api
-
-      - name: Pack
-        run: |
-          cp ./Procfile ./apps/api/Procfile
-          zip -r -y -p ${{github.run_id}}.zip .
-
