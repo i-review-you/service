@@ -1,15 +1,16 @@
-'use client';
+'use server';
 import LogoSmall from '@/assets/logo-small.svg';
 
 import React, { ReactNode } from 'react';
-import FloatingButton from '../../components/layout/FloatingButton';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { UserCircleIcon } from '@heroicons/react/24/solid';
+import { cookies } from 'next/headers';
 
-export default function ReviewsLayout({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
+import FloatingButton from '../../components/layout/FloatingButton';
+
+export default async function ReviewsLayout({ children }: { children: ReactNode }) {
+  const token = cookies().get('token')?.value;
+  const me = await fetch(`${process.env.API_ORIGIN}/me`, { headers: { authorization: `Bearer ${token}` } }).then(res => res.json());
 
   return (
     <div className="flex flex-col h-full">
@@ -24,11 +25,9 @@ export default function ReviewsLayout({ children }: { children: ReactNode }) {
             height={100}
           />
         </Link>
-        {!pathname.startsWith('/my-page') && (
-          <Link href="/user">
-            <UserCircleIcon className="size-10" />
-          </Link>
-        )}
+        <Link href={`/users/${me.username}`}>
+          <img className="size-10" src={me.avatarUrl} alt="" />
+        </Link>
       </header>
       <main className="grow">{children}</main>
       <FloatingButton />

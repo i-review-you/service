@@ -28,7 +28,7 @@ export default async function Page({ params }) {
   }
 
   const result = await response.json();
-  console.log('wefijweofiwe', result);
+
   return (
     <div className="h-full pt-3.5 bg-gray-100">
       <div className="mx-3.5 p-3 bg-white rounded-[10px]">
@@ -68,7 +68,7 @@ export default async function Page({ params }) {
                               authorization: `Bearer ${token}`,
                             },
                           }).then(res => res.json());
-                          revalidatePath('/users/[username]');
+                          revalidatePath('/users/[username]', 'page');
                         }}>
                         <button
                           type="submit"
@@ -90,7 +90,7 @@ export default async function Page({ params }) {
                               authorization: `Bearer ${token}`,
                             },
                           }).then(res => res.json());
-                          revalidatePath('/users/[username]');
+                          revalidatePath('/users/[username]', 'page');
                         }}>
                         <button
                           type="submit"
