@@ -68,7 +68,7 @@ export default async function Page({ params }) {
                               authorization: `Bearer ${token}`,
                             },
                           }).then(res => res.json());
-                          revalidatePath('/users/[username]');
+                          revalidatePath('/users/[username]', 'page');
                         }}>
                         <button
                           type="submit"
@@ -90,7 +90,7 @@ export default async function Page({ params }) {
                               authorization: `Bearer ${token}`,
                             },
                           }).then(res => res.json());
-                          revalidatePath('/users/[username]');
+                          revalidatePath('/users/[username]', 'page');
                         }}>
                         <button
                           type="submit"
