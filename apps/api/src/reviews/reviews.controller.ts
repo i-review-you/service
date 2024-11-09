@@ -11,8 +11,12 @@ import {
   HttpStatus,
   HttpException,
   Query,
+  Headers,
+  UseInterceptors,
+  UploadedFile,
   NotFoundException,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/CreateReviewDto';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -117,6 +121,20 @@ export class ReviewsController {
     } catch (error) {
       throw new HttpException('Failed to update eview', HttpStatus.BAD_REQUEST);
     }
+  }
+
+  @Post('upload')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(
+      @Headers('authorization') accessToken: string,
+      @Headers('refresh_token') refreshToken: string,
+      @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.reviewsService.uploadImage({
+      access_token: accessToken.split(' ')[1],
+      refresh_token: refreshToken,
+    }, file);
   }
 
   @Delete(':review_id')

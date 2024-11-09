@@ -46,6 +46,7 @@ export default async function ReviewItem({
   visibility,
   createdAt,
   updatedAt,
+  images,
 }: reviewDataCamel) {
   const likes = await fetchLikesAction(id);
 
@@ -54,6 +55,15 @@ export default async function ReviewItem({
       <div>
         <ReviewHeader user={author} rating={rating} reviewId={id} />
         <ReviewImages />
+        {images.length > 0 && (
+          <ul className="mt-1 mb-2 flex gap-3 flex-nowrap overflow-x-auto snap-x">
+            {images.map(image => (
+              <li key={image.id} className="shrink-0">
+                <img className="w-24 h-24 object-cover" src={image.url} alt="" />
+              </li>
+            ))}
+          </ul>
+        )}
         <ReviewTitle title={title} createdAt={createdAt} />
         <ReviewContents contents={content} />
       </div>

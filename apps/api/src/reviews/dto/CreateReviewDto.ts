@@ -47,4 +47,11 @@ export class CreateReviewDto {
   @ValidateNested({ each: true })
   @Type(() => ReviewTagDto)
   tags?: ReviewTagDto[];
+
+  @IsOptional()
+  @IsArray()
+  images?: {
+    object_id: string;
+    url: string;
+  }[];
 }
