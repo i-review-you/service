@@ -32,7 +32,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pnpm install --workspace=api
+          pnpm install --filter=api
 
       - name: Build
         run: pnpm run build:api
