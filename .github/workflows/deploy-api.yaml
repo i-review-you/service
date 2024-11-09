@@ -39,14 +39,14 @@ jobs:
           cp -rf apps/api/dist/ source/
           cp apps/api/Dockerfile source/Dockerfile
           cp apps/api/fly.toml source/fly.toml
-          cd source
 #          zip -r -y -q ../${{github.run_id}}.zip .
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy To Flyio
         run: |
-          pwd
           cd source
+          ls -al
+          pwd
           flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
