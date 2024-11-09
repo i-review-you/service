@@ -200,11 +200,7 @@ importers:
         specifier: ^8.8.0
         version: 8.13.0(eslint@9.14.0(jiti@1.21.6))(typescript@5.6.3)
 
-  packages/config-tailwind:
-    dependencies:
-      tailwindcss:
-        specifier: ^3.4.14
-        version: 3.4.14(ts-node@10.9.2(@swc/core@1.9.1(@swc/helpers@0.5.13))(@types/node@20.17.6)(typescript@5.6.3))
+  packages/config-tailwind: {}
 
   packages/react-components:
     dependencies:
