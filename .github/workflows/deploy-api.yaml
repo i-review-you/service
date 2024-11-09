@@ -29,13 +29,13 @@ jobs:
 
       - name: Install dependencies
         run: |  
-          npm install --workspaces=false
-          npm install --workspace=api
+          corepack enable
+          pnpm --version
+          pnpm install --filter=api
 
       - name: Build
         run: |
-          npm run build:api
-          npm uninstall turbo --workspaces=false
+          pnpm run build:api
 
       - name: Pack
         run: |
