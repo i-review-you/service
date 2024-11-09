@@ -36,7 +36,7 @@ jobs:
       - name: Pack
         run: |
           mkdir source
-          cp -rf apps/api/ncc/. source/
+          cp apps/api/dist/index.js source/index.js
           cp apps/api/Dockerfile source/Dockerfile
           cp apps/api/fly.toml source/fly.toml
           zip -r -y -q ${{github.run_id}}.zip source
