@@ -158,8 +158,8 @@ export class ReviewsService {
   }
 
   async createReview(user, createReviewDto: CreateReviewDto) {
-    const { categoryId, title, content, rating, visibility, tags, links } =
-      createReviewDto;
+    const { categoryId, title, content, rating, visibility, tags, links, images }
+      = createReviewDto;
 
     const { data: reviewData, error: reviewError } = await supabase
       .from('reviews')
@@ -206,6 +206,17 @@ export class ReviewsService {
         .from('review_links')
         .insert(linkData);
       if (linkError) throw new Error(linkError.message);
+    }
+
+    if (images && images.length > 0) {
+      for (const image of images) {
+        const { data, error } = await supabase.from('review_images').insert({
+          review_id: reviewId,
+          object_id: image.object_id,
+          sort_order: 0,
+          url: image.url,
+        });
+      }
     }
 
     return reviewData;
