@@ -39,6 +39,7 @@ jobs:
       - name: Pack
         run: |
           cp ./apps/api/Procfile ./Procfile
+          cp -r ./apps/api/.platform ./.platform
           zip -r -y -q ${{github.run_id}}.zip .
 
       - name: Upload Artifacts
