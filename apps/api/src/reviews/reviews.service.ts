@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import { createClient } from '@supabase/supabase-js';
 import { CreateReviewDto } from './dto/CreateReviewDto';
@@ -253,6 +254,21 @@ export class ReviewsService {
     }
 
     return data;
+  }
+
+  async uploadImage(user, file: Express.Multer.File) {
+    const uid = randomUUID();
+    const session = await supabase.auth.setSession(user);
+    console.log('session', session);
+    const { data, error } = await supabase.storage.from('review_images').upload(`${uid}.${file.originalname.split('.').at(-1)}`, file.buffer, {
+      contentType: file.mimetype,
+    });
+    console.log('????', data, error);
+    const url = await supabase.storage.from('review_images').getPublicUrl(data.path);
+    return {
+      id: data.id,
+      url,
+    };
   }
 
   async deleteReview(user, reviewId: number) {
