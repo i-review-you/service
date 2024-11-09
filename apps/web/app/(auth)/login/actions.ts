@@ -25,5 +25,7 @@ export async function login(prevState: any, formData: FormData) {
     expires: new Date(result.session.expires_at * 1000),
   });
 
+  cookies().set('rft', result.session.refresh_token);
+
   redirect('/');
 }
