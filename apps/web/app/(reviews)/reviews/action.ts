@@ -11,6 +11,8 @@ export async function createReviewAction(_: any, formData: FormData) {
   const rating = formData.get('rating')?.toString();
   const tags = formData.get('tags')?.toString();
   const links = formData.get('links')?.toString();
+  const imageIds = formData.getAll('images[][object_id]');
+  const imageUrls = formData.getAll('images[][url]');
 
   if (!title || !content || !categoryId || !visibility || !rating) {
     return {
@@ -26,6 +28,10 @@ export async function createReviewAction(_: any, formData: FormData) {
     visibility,
     rating,
     tags: tags.split(' '),
+    images: imageIds.map((id, idx) => ({
+      object_id: id,
+      url: imageUrls[idx],
+    })),
   };
 
   try {
