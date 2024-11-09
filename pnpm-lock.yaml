@@ -213,6 +213,9 @@ importers:
       react-dom:
         specifier: ^19.0.0-rc-66855b96-20241106
         version: 19.0.0-rc-fb9a90fa48-20240614(react@19.0.0-rc-fb9a90fa48-20240614)
+      tailwindcss:
+        specifier: ^3.4.14
+        version: 3.4.14(ts-node@10.9.2(@swc/core@1.9.1(@swc/helpers@0.5.13))(@types/node@20.17.6)(typescript@5.6.3))
     optionalDependencies:
       '@rollup/rollup-linux-x64-gnu':
         specifier: ^4.24.0
@@ -242,9 +245,6 @@ importers:
       storybook:
         specifier: ^8.4.2
         version: 8.4.2
-      tailwindcss:
-        specifier: ^3.4.14
-        version: 3.4.14(ts-node@10.9.2(@swc/core@1.9.1(@swc/helpers@0.5.13))(@types/node@20.17.6)(typescript@5.6.3))
 
 packages:
 
