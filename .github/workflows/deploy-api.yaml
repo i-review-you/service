@@ -37,7 +37,7 @@ jobs:
         run: |
           mkdir source
           cp -rf apps/api/dist/. source/
-          cp -rf apps/api/node_modules source/
+          cp -rf apps/api/node_modules/ source/
           cp apps/api/Dockerfile source/Dockerfile
           cp apps/api/fly.toml source/fly.toml
 #          zip -r -y -q ../${{github.run_id}}.zip .
