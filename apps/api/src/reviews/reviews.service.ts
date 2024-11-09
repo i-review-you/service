@@ -38,7 +38,8 @@ export class ReviewsService {
           username
         ),
         tags:review_tags(name, deleted_at),
-        links:review_links(name, href, deleted_at)
+        links:review_links(name, href, deleted_at),
+        images:review_images(id, url)
       `,
       )
       .is('deleted_at', null)
