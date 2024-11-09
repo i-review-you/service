@@ -23,7 +23,6 @@ export default async function Page({ searchParams }) {
   );
   const reviewsData = await result.json();
   const reviews: reviewDataSnake[] = reviewsData.reviews || [];
-  console.dir(reviewsData, { depth: null });
 
   return (
     <div className="px-3.5 pt-2">

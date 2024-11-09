@@ -1,7 +1,7 @@
 'use client';
 import { useState, useActionState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { StarIcon } from '@heroicons/react/24/solid';
+import { StarIcon, PhotoIcon } from '@heroicons/react/24/solid';
 import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
 import {
   Button,
@@ -18,8 +18,10 @@ export default function Form({ review, categories }) {
   const router = useRouter();
   const [state, formAction, isPending] = useActionState(
     review?.id ? updateReviewAction : createReviewAction,
-    {}
+    null,
   );
+
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     if (state?.status === true) {
@@ -54,15 +56,53 @@ export default function Form({ review, categories }) {
           placeholder="리뷰를 작성해주세요"
           defaultValue={review?.content}
         />
-        {/* <div> */}
-        {/*  <Input type="file" name="imageUpload" placeholder="이미지 업로드" /> */}
-        {/* </div> */}
+        {/* <Input name="links" placeholder="링크추가" /> */}
+        <div>
+          <label className="px-4 py-4 flex bg-white rounded">
+            <p className="grow">이미지 업로드</p>
+            <PhotoIcon className="w-5" />
+
+            <input type="file" className="hidden" onChange={(event) => {
+              const formData = new FormData();
+              formData.set('file', event.target.files[0]);
+
+              fetch('/api/reviews/upload-image', {
+                method: 'POST',
+                body: formData,
+              })
+                .then((response) => {
+                  return response.json();
+                }).then((result) => {
+                  console.log('fefe', result);
+                  setImages((prev) => {
+                    const arr = [...prev];
+                    arr.push(result);
+                    return arr;
+                  });
+                })
+                .finally(() => {
+                  event.target.value = '';
+                });
+            }}/>
+          </label>
+          {images.length > 0 && (
+            <ul className="mt-4 flex gap-3">
+              {images.map(image => (
+                <li key={image.id}>
+                  <input type="hidden" name="images[][object_id]" value={image.id}/>
+                  <input type="hidden" name="images[][url]" value={image.url}/>
+                  <img className="w-24 h-24" src={image.url} alt=""/>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         <Input
           name="tags"
           placeholder="태그"
           defaultValue={review?.review_tags.map((tag) => tag.name).join(' ')}
         />
-        {/* <Input name="links" placeholder="링크추가" /> */}
+        {/* <Input name="link" placeholder="링크추가" /> */}
         <WriteVisibility defaultValue={review?.visibility} />
         <WriteRating defaultValue={review?.rating} />
       </div>
