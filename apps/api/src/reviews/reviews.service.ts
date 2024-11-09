@@ -53,17 +53,35 @@ export class ReviewsService {
 
       if (followingError) throw new Error(followingError.message);
 
-      const followingIds = followingData.map((follow) => follow.following_id);
+      const followingIds = followingData.map(follow => follow.following_id);
 
       if (followingIds.length > 0) {
-        const userCondition = `user_id.eq.${user.id}`;
+        const followingReviews = supabase
+          .from('reviews')
+          .select('*')
+          .in('user_id', followingIds)
+          .eq('visibility', 'followers')
+          .is('deleted_at', null);
 
-        const followingCondition = followingIds
-          .map((id) => `user_id.eq.${id}`)
-          .map((id) => `visibility.eq.followers`)
-          .join(',');
+        const myReviews = supabase
+          .from('reviews')
+          .select('*')
+          .eq('user_id', user.id)
+          .is('deleted_at', null);
 
-        query = query.or(`${userCondition},${followingCondition}`);
+        const { data: followingReviewsData, error: followingReviewsError } =
+          await followingReviews;
+        const { data: myReviewsData, error: myReviewsError } = await myReviews;
+
+        if (followingReviewsError)
+          throw new Error(followingReviewsError.message);
+        if (myReviewsError) throw new Error(myReviewsError.message);
+
+        const combinedReviews = [...followingReviewsData, ...myReviewsData];
+
+        query = query.or(
+          combinedReviews.map((review) => `id.eq.${review.id}`).join(','),
+        );
       } else {
         query = query.eq('user_id', user.id);
       }
@@ -196,7 +214,6 @@ export class ReviewsService {
     const { categoryId, title, content, rating, visibility, tags, links } =
       createReviewDto;
 
-    // 리뷰 기본 정보 업데이트
     const { data, error } = await supabase
       .from('reviews')
       .update({
