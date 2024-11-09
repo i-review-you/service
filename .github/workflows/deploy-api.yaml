@@ -1,6 +1,6 @@
 name: deploy - api
 on:
-  push:
+  pull_request:
     branches:
       - main
     paths:
@@ -27,7 +27,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: |  
+        run: |
           npm install --workspaces=false
           npm install --workspace=api
 
