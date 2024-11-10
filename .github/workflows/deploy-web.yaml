@@ -10,39 +10,40 @@ on:
 
 env:
   API_ORIGIN: ${{ secrets.API_ORIGIN }}
-  BEANSTALK_APPLICATION_NAME: i-review-front
-  BEANSTALK_ENVIRONMENT_NAME: I-review-front-env
+  TURBO_TELEMETRY_DISABLED: 1
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    environment: Production - web
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          pnpm install --filter=web...
 
       - name: Build
-        run: npm run build:web
+        run: pnpm run build:web
 
       - name: Pack
         run: |
-          cp ./apps/web/Procfile ./apps/web/.next/standalone/apps/web/Procfile
-          cp -r ./apps/web/.platform ./.platform
-          cp -r ./apps/web/.next/standalone/node_modules ./apps/web/.next/standalone/apps/web/node_modules
-          cp -r ./apps/web/.next/static ./apps/web/.next/standalone/apps/web/.next/static
-          cp -r ./apps/web/public ./apps/web/.next/standalone/apps/web/public
-          cd ./apps/web/.next/standalone/apps/web
-          zip -r ../../../../../../${{github.run_id}}.zip .
+          mkdir source
+          cp -r apps/web/.next/standalone/. source
+          cp -r apps/web/.next/static ./source/apps/web/.next
+          cp -r apps/web/public ./source/apps/web/.next
+          cp apps/web/Dockerfile source/Dockerfile
+          cp apps/web/fly.toml source/fly.toml
+          cd source
+          zip -r ../${{github.run_id}}.zip .
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4.4.0
@@ -50,23 +51,10 @@ jobs:
           name: deploy-files
           path: ${{github.run_id}}.zip
 
-  deploy:
-    runs-on: ubuntu-latest
-    environment: Production - web
-    needs: build
-
-    steps:
-      - uses: actions/download-artifact@v4.1.8
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ap-northeast-2
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Deploy
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Deploy To Flyio
         run: |
-          aws s3 cp "deploy-files/${{github.run_id}}.zip" s3://elasticbeanstalk-ap-northeast-2-${{ secrets.AWS_ACCOUNT_ID }}/
-          aws elasticbeanstalk create-application-version --application-name $BEANSTALK_APPLICATION_NAME --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-ap-northeast-2-${{ secrets.AWS_ACCOUNT_ID }}",S3Key="${{github.run_id}}.zip"
-          aws elasticbeanstalk update-environment --application-name $BEANSTALK_APPLICATION_NAME --environment-name $BEANSTALK_ENVIRONMENT_NAME --version-label ${{github.run_id}}
-          aws elasticbeanstalk wait environment-updated --application-name $BEANSTALK_APPLICATION_NAME --environment-name $BEANSTALK_ENVIRONMENT_NAME
+          ls -al
+          flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

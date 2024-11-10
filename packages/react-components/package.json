@@ -9,7 +9,6 @@
     "./tailwind.css": "./dist/index.css"
   },
   "scripts": {
-    "build": "tailwindcss -i ./src/tailwind.css -o ./dist/index.css",
     "lint": "eslint src/",
     "dev": "tailwindcss -i ./src/tailwind.css -o ./dist/index.css --watch",
     "type-check": "tsc --noEmit",
@@ -17,22 +16,22 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.26.24"
+    "@floating-ui/react": "^0.26.27"
   },
   "peerDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.0.0-rc-66855b96-20241106",
+    "react-dom": "^19.0.0-rc-66855b96-20241106",
+    "tailwindcss": "^3.4.14"
   },
   "devDependencies": {
-    "@i-review-you/config-eslint": "*",
-    "@i-review-you/config-tailwind": "*",
-    "@storybook/addon-essentials": "^8.3.5",
-    "@storybook/preview-api": "^8.3.5",
-    "@storybook/react": "^8.3.5",
-    "@storybook/react-vite": "^8.3.5",
+    "@i-review-you/config-eslint": "workspace:*",
+    "@i-review-you/config-tailwind": "workspace:*",
+    "@storybook/addon-essentials": "^8.4.2",
+    "@storybook/preview-api": "^8.4.2",
+    "@storybook/react": "^8.4.2",
+    "@storybook/react-vite": "^8.4.2",
     "clsx": "^2.1.1",
-    "storybook": "^8.3.5",
-    "tailwindcss": "^3.4.13"
+    "storybook": "^8.4.2"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.24.0"
