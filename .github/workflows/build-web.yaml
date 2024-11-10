@@ -2,6 +2,7 @@ name: build - web
 on:
   pull_request:
     paths:
+      - .github/workflows/build-web.yaml
       - packages/react-components/**
       - apps/web/**
     types: [opened, synchronize]

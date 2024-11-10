@@ -2,6 +2,7 @@ name: build - api
 on:
   pull_request:
     paths:
+      - .github/workflows/build-api.yaml
       - apps/api/**
     types: [opened, synchronize]
 

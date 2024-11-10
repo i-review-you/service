@@ -1,6 +1,6 @@
 name: deploy - web
 on:
-  pull_request:
+  push:
     branches:
       - main
     paths:
@@ -54,9 +54,7 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy To Flyio
         run: |
-          cd source
           ls -al
-          pwd
           flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

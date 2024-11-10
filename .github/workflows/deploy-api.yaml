@@ -8,8 +8,7 @@ on:
       - apps/api/**
 
 env:
-  BEANSTALK_APPLICATION_NAME: i-review
-  BEANSTALK_ENVIRONMENT_NAME: I-review-env
+  TURBO_TELEMETRY_DISABLED: 1
 
 jobs:
   deply:
