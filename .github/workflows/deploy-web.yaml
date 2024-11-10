@@ -53,6 +53,7 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy To Flyio
         run: |
+          cd source
           ls -al
           pwd
           flyctl deploy --remote-only
