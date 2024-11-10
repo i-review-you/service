@@ -38,8 +38,8 @@ jobs:
         run: |
           mkdir source
           cp -r apps/web/.next/standalone/. source
-          cp -r apps/web/.next/static ./source/.next
-          cp -r apps/web/public ./source/public
+          cp -r apps/web/.next/static ./source/apps/web/.next
+          cp -r apps/web/public ./source/apps/web/.next
           cp apps/web/Dockerfile source/Dockerfile
           cp apps/web/fly.toml source/fly.toml
           cd source
