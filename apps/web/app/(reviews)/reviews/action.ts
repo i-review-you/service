@@ -36,8 +36,8 @@ export async function createReviewAction(_: any, formData: FormData) {
 
   try {
     const token = cookies().get('token')?.value;
-    const result = await fetch(`http://localhost:3000/reviews`, {
     const url = new URL('/reviews', process.env.API_ORIGIN);
+    const result = await fetch(url, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
