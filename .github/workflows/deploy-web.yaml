@@ -10,6 +10,7 @@ on:
 
 env:
   API_ORIGIN: ${{ secrets.API_ORIGIN }}
+  TURBO_TELEMETRY_DISABLED: 1
 
 jobs:
   deploy:
@@ -36,8 +37,7 @@ jobs:
       - name: Pack
         run: |
           mkdir source
-          cp -r apps/web/.next/standalone/apps/web/.next source
-          cp  apps/web/.next/standalone/apps/web/server.js source/server.js
+          cp -r apps/web/.next/standalone/. source
           cp -r apps/web/.next/static ./source
           cp -r apps/web/public ./source
           cp apps/web/Dockerfile source/Dockerfile
