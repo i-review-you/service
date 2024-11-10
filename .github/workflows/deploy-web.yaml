@@ -36,7 +36,7 @@ jobs:
       - name: Pack
         run: |
           mkdir source
-          cp -r apps/web/.next/standalone/node_modules ./source
+          cp -r apps/web/.next/standalone/. ./source
           cp -r apps/web/.next/static ./source
           cp -r apps/web/public ./source
           cp apps/web/Dockerfile source/Dockerfile
