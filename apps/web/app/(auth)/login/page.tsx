@@ -1,20 +1,36 @@
 'use client';
 import Logo from '@/assets/logo-small.svg';
 
-import React from 'react';
-import { useActionState } from 'react';
+import React, { useState, useTransition } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from '@i-review-you/react-components';
 
 import { login } from './actions';
 
 export default function Page() {
-  const [state, submitAction, isPending] = useActionState(login, {});
+  const [message, setMessage] = useState(null);
+  const [isPending, startTransition] = useTransition();
 
   return (
     <div className="px-8 flex flex-col justify-center flex-1 h-full gap-4">
       <Image src={Logo} alt="로고" />
-      <form action={submitAction}>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          const formElement = event.target as HTMLFormElement;
+          const formData = new FormData(formElement);
+          startTransition(async () => {
+            const result = await login({
+              email: formData.get('email') as string,
+              password: formData.get('password') as string,
+            });
+            console.log('gdgd', result);
+            setMessage(result.message);
+            (formElement.elements.namedItem('password') as HTMLInputElement).value = '';
+          });
+        }}
+      >
         <input
           name="email"
           className="w-full px-3 py-3 border border-gray-100 rounded-[5px]"
@@ -26,7 +42,7 @@ export default function Page() {
           className="mt-2.5 w-full px-3 py-3 border border-gray-100 rounded-[5px]"
           placeholder="비밀번호"
         />
-        {state && <p className="mt-3 text-[14px] text-red-500">{state.message}</p>}
+        {message && <p className="mt-3 text-[14px] text-red-500">{message}</p>}
         <Button
           type="submit"
           className="relative block w-full mt-12"
@@ -53,7 +69,7 @@ export default function Page() {
       </form>
       <div className="flex justify-between">
         <a>비밀번호 초기화</a>
-        <a>회원가입</a>
+        <Link href="/signup">회원가입</Link>
       </div>
     </div>
   );
