@@ -36,18 +36,18 @@ export async function updateReviewAction(_: any, formData: FormData) {
 
   try {
     const token = (await cookies()).get('token')?.value;
-    const result = await fetch(
-      `http://localhost:3000/reviews/${parseInt(reviewId)}`,
-      {
-        method: 'PUT',
-        headers: {
-          'content-type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        credentials: 'include',
-        body: JSON.stringify(data),
+
+    const url = new URL(`/reviews/${reviewId}`, process.env.API_ORIGIN);
+    const result = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
-    );
+      credentials: 'include',
+      body: JSON.stringify(data),
+    });
+
     if (!result.ok) {
       throw new Error(result.statusText);
     }
