@@ -8,9 +8,11 @@
     "build:web": "turbo run build --filter=web",
     "storybook": "turbo run storybook --filter=@i-review-you/react-components",
     "dev": "turbo run dev",
+    "dev:api": "turbo run dev --filter=api",
+    "dev:web": "turbo run dev --filter=web",
     "lint": "turbo run lint"
   },
   "devDependencies": {
-    "turbo": "^2.2.3"
+    "turbo": "^2.3.3"
   }
 }

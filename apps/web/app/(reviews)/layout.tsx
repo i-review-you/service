@@ -1,4 +1,3 @@
-'use server';
 import LogoSmall from '@/assets/logo-small.svg';
 
 import React, { ReactNode } from 'react';
@@ -9,7 +8,7 @@ import { cookies } from 'next/headers';
 import FloatingButton from '../../components/layout/FloatingButton';
 
 export default async function ReviewsLayout({ children }: { children: ReactNode }) {
-  const token = cookies().get('token')?.value;
+  const token = (await cookies()).get('token')?.value;
   const me = await fetch(`${process.env.API_ORIGIN}/me`, { headers: { authorization: `Bearer ${token}` } }).then(res => res.json());
 
   return (

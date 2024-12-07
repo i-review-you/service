@@ -8,7 +8,7 @@ import { convertKeysToCamelCase } from '../../../utils/camelCaseUtil';
 export const dynamic = 'force-dynamic';
 
 export default async function Page({ searchParams }) {
-  const token = cookies().get('token')?.value;
+  const token = (await cookies()).get('token')?.value;
   const url = new URL('/reviews', process.env.API_ORIGIN);
   url.searchParams.set('category_id', searchParams.category_id || '');
 
