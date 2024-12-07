@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
-  const token = cookies().get('token')?.value;
+  const token = (await cookies()).get('token')?.value;
   const url = new URL('/reviews/upload', process.env.API_ORIGIN);
   const body = await req.formData();
 
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
-      refresh_token: cookies().get('rft')?.value,
+      refresh_token: (await cookies()).get('rft')?.value,
     },
     body: formData,
   });

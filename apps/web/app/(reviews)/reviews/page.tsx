@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export default async function Page({ searchParams }) {
   const token = (await cookies()).get('token')?.value;
   const url = new URL('/reviews', process.env.API_ORIGIN);
-  url.searchParams.set('category_id', searchParams.category_id || '');
+  url.searchParams.set('category_id', (await searchParams).category_id || '');
 
   const result = await fetch(
     url,
