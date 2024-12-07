@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 
 async function getReviewData(id: string) {
   try {
-    const token = cookies().get('token')?.value;
+    const token = (await cookies()).get('token')?.value;
 
     if (!token) {
       throw new Error('토큰 없음');

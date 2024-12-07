@@ -1,9 +1,10 @@
+'use server';
 import { cookies } from 'next/headers';
 import ReviewFilterCheckbox from './ReviewFilterCheckbox';
 import ReviewFilterSelect from './ReviewFilterSelect';
 
 export default async function ReviewFilter() {
-  const token = cookies().get('token')?.value;
+  const token = (await cookies()).get('token')?.value;
 
   const url = new URL('/categories', process.env.API_ORIGIN);
   const response = await fetch(url, {

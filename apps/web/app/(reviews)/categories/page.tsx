@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import Form from './_categories';
 
 export default async function Page() {
-  const token = cookies().get('token')?.value;
+  const token = (await cookies()).get('token')?.value;
 
   const url = new URL('/categories', process.env.API_ORIGIN);
   const response = await fetch(url, {

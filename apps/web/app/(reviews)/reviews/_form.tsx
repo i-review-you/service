@@ -1,13 +1,12 @@
 'use client';
-import { useState, useActionState, useEffect } from 'react';
+import React, { useState, useActionState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { StarIcon, PhotoIcon } from '@heroicons/react/24/solid';
+import { StarIcon, PhotoIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { StarIcon as OutlineStarIcon } from '@heroicons/react/24/outline';
 import {
   Button,
   Input,
   Textarea,
-  FixedActionButton,
   Select,
 } from '@i-review-you/react-components';
 
@@ -21,7 +20,30 @@ export default function Form({ review, categories }) {
     null,
   );
 
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(review.images || []);
+
+  const onImageChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const formData = new FormData();
+    formData.set('file', event.target.files[0]);
+
+    fetch('/api/reviews/upload-image', {
+      method: 'POST',
+      body: formData,
+    }).then((response) => {
+      return response.json();
+    }).then((result) => {
+      setImages((prev) => {
+        const arr = [...prev];
+        arr.push({
+          object_id: result.id,
+          url: result.url,
+        });
+        return arr;
+      });
+    }).finally(() => {
+      event.target.value = '';
+    });
+  }, []);
 
   useEffect(() => {
     if (state?.status === true) {
@@ -62,36 +84,24 @@ export default function Form({ review, categories }) {
             <p className="grow">이미지 업로드</p>
             <PhotoIcon className="w-5" />
 
-            <input type="file" className="hidden" onChange={(event) => {
-              const formData = new FormData();
-              formData.set('file', event.target.files[0]);
-
-              fetch('/api/reviews/upload-image', {
-                method: 'POST',
-                body: formData,
-              })
-                .then((response) => {
-                  return response.json();
-                }).then((result) => {
-                  console.log('fefe', result);
-                  setImages((prev) => {
-                    const arr = [...prev];
-                    arr.push(result);
-                    return arr;
-                  });
-                })
-                .finally(() => {
-                  event.target.value = '';
-                });
-            }}/>
+            <input type="file" className="hidden" onChange={onImageChange} />
           </label>
           {images.length > 0 && (
             <ul className="mt-4 flex gap-3">
               {images.map(image => (
-                <li key={image.id}>
-                  <input type="hidden" name="images[][object_id]" value={image.id}/>
+                <li key={image.id} className="relative">
+                  <input type="hidden" name="images[][object_id]" value={image.object_id}/>
                   <input type="hidden" name="images[][url]" value={image.url}/>
                   <img className="w-24 h-24" src={image.url} alt=""/>
+                  <button
+                    type="button"
+                    className="absolute top-1 right-1"
+                    onClick={() => setImages((prev) => {
+                      return prev.filter(i => i.object_id !== image.object_id);
+                    })}
+                  >
+                    <XCircleIcon className="w-4 h-4" />
+                  </button>
                 </li>
               ))}
             </ul>
@@ -106,9 +116,9 @@ export default function Form({ review, categories }) {
         <WriteVisibility defaultValue={review?.visibility} />
         <WriteRating defaultValue={review?.rating} />
       </div>
-      <FixedActionButton type="submit" scheme="primary" disabled={isPending}>
+      <button type="submit" className="sticky bottom-0 text-xl font-bold pt-4 pb-12 bg-primary text-white" disabled={isPending}>
         {review?.id ? '리뷰 수정' : '리뷰 작성'}
-      </FixedActionButton>
+      </button>
     </form>
   );
 }

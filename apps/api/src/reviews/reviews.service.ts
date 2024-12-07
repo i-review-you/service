@@ -141,7 +141,7 @@ export class ReviewsService {
     const { data: reviewData, error } = await supabase
       .from('reviews')
       .select(
-        '*, profile(username), review_tags(name), review_links(name, href)',
+        '*, profile(username), review_tags(name), review_links(name, href), images:review_images(object_id, url)',
       )
       .eq('id', reviewId)
       .eq('user_id', user.id)
@@ -223,8 +223,19 @@ export class ReviewsService {
   }
 
   async updateReview(user, reviewId: number, createReviewDto: CreateReviewDto) {
-    const { categoryId, title, content, rating, visibility, tags, links } =
-      createReviewDto;
+    const { categoryId, title, content, rating, visibility, tags, links, images }
+      = createReviewDto;
+
+    console.log('이미지가 안오나?', images);
+    const { data: currentReview } = await supabase
+      .from('reviews')
+      .select(
+        '*, profile(username), review_tags(name), review_links(name, href), images:review_images(id, object_id, url, sort_order)',
+      )
+      .eq('id', reviewId)
+      .eq('user_id', user.id)
+      .is('deleted_at', null)
+      .single();
 
     const { data, error } = await supabase
       .from('reviews')
@@ -259,6 +270,38 @@ export class ReviewsService {
         .from('review_tags')
         .insert(tagData);
       if (tagError) throw new Error(tagError.message);
+    }
+
+    if (images && images.length > 0) {
+      let sortOrder = 0;
+      for (const image of images) {
+        const _image = currentReview.images.find(img => img.object_id === image.object_id);
+        if (_image) {
+          if (_image.sort_order !== sortOrder) {
+            const { data, error } = await supabase.from('review_images').update({
+              sort_order: sortOrder,
+            }).eq('id', _image.id);
+          }
+        }
+        else {
+          const { data, error } = await supabase.from('review_images').insert({
+            review_id: reviewId,
+            object_id: image.object_id,
+            sort_order: sortOrder,
+            url: image.url,
+          });
+        }
+        sortOrder++;
+      }
+
+      // 이미지 삭제
+      for (const image of currentReview.images) {
+        if (images.some(i => i.object_id === image.object_id)) {
+          continue;
+        }
+
+        await supabase.from('review_images').delete().eq('id', image.id);
+      }
     }
 
     await supabase

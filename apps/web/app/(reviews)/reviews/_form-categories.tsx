@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import Select from '../../../components/ui/Select';
 
 export default async function Categories() {
-  const token = cookies().get('token')?.value;
+  const token = (await cookies()).get('token')?.value;
 
   const url = new URL('/categories', process.env.API_ORIGIN);
   const response = await fetch(url, {

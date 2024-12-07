@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import Form from '../../_form';
 
 export default async function Page({ params: { id } }) {
-  const token = cookies().get('token')?.value;
+  const token = (await cookies()).get('token')?.value;
   const url = new URL(`/reviews/${id}`, process.env.API_ORIGIN);
   const categoriesUrl = new URL('/categories', process.env.API_ORIGIN);
 

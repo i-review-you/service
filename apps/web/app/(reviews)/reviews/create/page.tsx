@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import Form from '../_form';
 
 export default async function Page() {
-  const token = cookies().get('token')?.value;
+  const token = (await cookies()).get('token')?.value;
 
   if (!token) {
     redirect('/login');

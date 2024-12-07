@@ -1,5 +1,4 @@
 'use server';
-
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 
@@ -12,6 +11,8 @@ export async function updateReviewAction(_: any, formData: FormData) {
   const rating = formData.get('rating')?.toString();
   const tags = formData.get('tags')?.toString();
   const links = formData.get('links')?.toString();
+  const imageIds = formData.getAll('images[][object_id]');
+  const imageUrls = formData.getAll('images[][url]');
 
   if (!title || !content || !categoryId || !visibility || !rating) {
     return {
@@ -27,21 +28,25 @@ export async function updateReviewAction(_: any, formData: FormData) {
     visibility,
     rating,
     tags: tags.split(' '),
+    images: imageIds.map((id, idx) => ({
+      object_id: id,
+      url: imageUrls[idx],
+    })),
   };
 
   try {
-    const token = cookies().get('token')?.value;
+    const token = (await cookies()).get('token')?.value;
     const result = await fetch(
       `http://localhost:3000/reviews/${parseInt(reviewId)}`,
       {
         method: 'PUT',
         headers: {
           'content-type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
         },
         credentials: 'include',
         body: JSON.stringify(data),
-      }
+      },
     );
     if (!result.ok) {
       throw new Error(result.statusText);

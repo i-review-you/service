@@ -2,7 +2,10 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export async function login(prevState: any, formData: FormData) {
+export async function login(payload: {
+  email: string;
+  password: string;
+}) {
   const url = new URL('/auth', process.env.API_ORIGIN);
   const response = await fetch(url, {
     method: 'POST',
@@ -10,8 +13,8 @@ export async function login(prevState: any, formData: FormData) {
       'content-type': 'application/json',
     },
     body: JSON.stringify({
-      email: formData.get('email'),
-      password: formData.get('password'),
+      email: payload.email,
+      password: payload.password,
     }),
   });
   const result = await response.json();
@@ -21,11 +24,11 @@ export async function login(prevState: any, formData: FormData) {
     };
   }
 
-  cookies().set('token', result.session.access_token, {
+  (await cookies()).set('token', result.session.access_token, {
     expires: new Date(result.session.expires_at * 1000),
   });
 
-  cookies().set('rft', result.session.refresh_token);
+  (await cookies()).set('rft', result.session.refresh_token);
 
   redirect('/');
 }

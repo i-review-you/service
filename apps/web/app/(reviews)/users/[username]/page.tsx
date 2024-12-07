@@ -9,7 +9,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/solid';
 
 export default async function Page({ params }) {
   const username = params['username'];
-  const token = cookies().get('token')?.value;
+  const token = (await cookies()).get('token')?.value;
 
   const me = await fetch(`${process.env.API_ORIGIN}/me`, { headers: { authorization: `Bearer ${token}` } }).then(res => res.json());
   const url = new URL(`/users/${username}`, process.env.API_ORIGIN);
