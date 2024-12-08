@@ -20,7 +20,7 @@ export default function Form({ review, categories }) {
     null,
   );
 
-  const [images, setImages] = useState(review.images || []);
+  const [images, setImages] = useState(review?.images || []);
 
   const onImageChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const formData = new FormData();
